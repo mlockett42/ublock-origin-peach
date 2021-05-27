@@ -33,6 +33,33 @@ if ( vAPI.webextFlavor === undefined ) {
 
 /******************************************************************************/
 
+console.log("window=", window);
+console.log("document=", document);
+
+window.myUrl = "Default";
+document.myUrl = "Default";
+
+console.log("window.myUrl=", window.myUrl)
+console.log("document.myUrl=", document.myUrl)
+
+function backgroundFunction () {
+    return "hello from the background!"
+}
+
+// chrome.runtime.onMessage.addListener(function (request) {
+//     console.log("message receive=", request);
+//     if (request.cmd === "shutdown") {
+//         return "Hello there";
+//     }
+// });   
+
+chrome.extension.onConnect.addListener(function(port) {
+    console.log("Connected ..... port=", port);
+    port.onMessage.addListener(function(msg) {
+        console.log("message recieved " + msg);
+        port.postMessage({text: "Hi Popup.js", what:"Peach"});
+    });
+});
 const µBlock = (( ) => { // jshint ignore:line
 
     const hiddenSettingsDefault = {

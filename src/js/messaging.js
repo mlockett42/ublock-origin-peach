@@ -61,6 +61,10 @@ const getDomainNames = function(targets) {
 };
 
 const onMessage = function(request, sender, callback) {
+    if (typeof request === "undefined") {
+        // Message was sent by peach we can ignore
+        return;
+    }
     // Async
     switch ( request.what ) {
     case 'getAssetContent':
