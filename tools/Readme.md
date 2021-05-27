@@ -14,13 +14,13 @@ cd ./vue_frontend/src
 npm run debug
 ```
 
-Then copy the following files from the `./vue_frontend/dist` folder into 
+Then copy the following files from the `./vue_frontend/dist` folder into `./dist/build/uBlock0.chromium`
 
 ```
 popup.html
 ```
 
-Then copy the following files from the `./vue_frontend/dist/js` folder
+Then copy the following files from the `./vue_frontend/dist/js` folder `./dist/build/uBlock0.chromium/js`
 
 ```
 popup.*
