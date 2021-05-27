@@ -27,3 +27,8 @@ popup.*
 chunk-vendors.*
 ```
 
+Then copy the following files from the `./vue_frontend/dist/css` folder `./dist/build/uBlock0.chromium/css`
+
+```
+popup.*
+```
