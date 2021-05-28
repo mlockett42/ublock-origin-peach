@@ -54,11 +54,11 @@ function backgroundFunction () {
 // });   
 
 chrome.extension.onConnect.addListener(function(port) {
-    console.log("Connected ..... port=", port);
+    // console.log("Connected ..... port=", port);
     port.onMessage.addListener(function(msg) {
         console.log("message recieved " + msg);
-        console.log("µBlock=", µBlock);
-        console.log("Blocked content count=", µBlock.localSettings.blockedRequestCount);
+        // console.log("µBlock=", µBlock);
+        // console.log("Blocked content count=", µBlock.localSettings.blockedRequestCount);
         port.postMessage({text: "Hi Popup.js", what:"Peach", uBlock: µBlock});
     });
 });

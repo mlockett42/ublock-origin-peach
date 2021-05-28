@@ -1,6 +1,7 @@
 <template>
   <div>
-    <p>{{ myURL }}</p>
+    <p>Blocked request count {{ blockedRequestCount }}</p>
+    <p>Allowed request count {{ allowedRequestCount }}</p>
     <button v-on:click="greet">Reload</button>
   </div>
 </template>
@@ -10,27 +11,37 @@ export default {
   name: "HelloWorld",
   mounted() {
     console.log("mounted called");
-    var bg = chrome.extension.getBackgroundPage();
-    this.myURL = bg.myURL;
+    //var bg = chrome.extension.getBackgroundPage();
+    //this.myURL = bg.myURL;
+      this.port = chrome.extension.connect({
+          name: "Sample Communication"
+      });
+      this.port.postMessage("Hi BackGround");
+      let self = this;
+      this.port.onMessage.addListener(function(msg) {
+          self.blockedRequestCount = msg.uBlock.localSettings.blockedRequestCount;
+          self.allowedRequestCount = msg.uBlock.localSettings.allowedRequestCount;
+      });
 
     //browser.runtime.sendMessage({});
   },
   data() {
     return {
       myURL: "",
-      defaultText: "Hello World"
+      blockedRequestCount: "Loading",
+      allowedRequestCount: "Loading",
+      defaultText: "Hello World",
+      port: null
     }
   },
   methods: {
     greet: function (event) {
-      var port = chrome.extension.connect({
-          name: "Sample Communication"
-      });
-      port.postMessage("Hi BackGround");
+      this.port.postMessage("Hi BackGround");
+      let self = this;
       port.onMessage.addListener(function(msg) {
-          console.log("message recieved", msg);
-          alert("message recieved" + msg.text);
-          alert(`"Blocked content count=${msg.uBlock.localSettings.blockedRequestCount}`);
+          self.blockedRequestCount = msg.uBlock.localSettings.blockedRequestCount;
+          self.allowedRequestCount = msg.uBlock.localSettings.allowedRequestCount;
+          alert(`self.blockedRequestCount=${self.blockedRequestCount}`);
       });
       // `this` inside methods points to the Vue instance
       // chrome.runtime.onMessage.addListener(function (answer) { alert(`answer=${answer}`) });
