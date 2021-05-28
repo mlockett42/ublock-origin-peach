@@ -57,7 +57,9 @@ chrome.extension.onConnect.addListener(function(port) {
     console.log("Connected ..... port=", port);
     port.onMessage.addListener(function(msg) {
         console.log("message recieved " + msg);
-        port.postMessage({text: "Hi Popup.js", what:"Peach"});
+        console.log("µBlock=", µBlock);
+        console.log("Blocked content count=", µBlock.localSettings.blockedRequestCount);
+        port.postMessage({text: "Hi Popup.js", what:"Peach", uBlock: µBlock});
     });
 });
 const µBlock = (( ) => { // jshint ignore:line

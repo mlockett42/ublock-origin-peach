@@ -30,6 +30,7 @@ export default {
       port.onMessage.addListener(function(msg) {
           console.log("message recieved", msg);
           alert("message recieved" + msg.text);
+          alert(`"Blocked content count=${msg.uBlock.localSettings.blockedRequestCount}`);
       });
       // `this` inside methods points to the Vue instance
       // chrome.runtime.onMessage.addListener(function (answer) { alert(`answer=${answer}`) });
