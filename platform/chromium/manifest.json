@@ -8,7 +8,7 @@
       "16": "img/icon_16.png",
       "32": "img/icon_32.png"
     },
-    "default_title": "uBlock Origin",
+    "default_title": "Peach uBlock Origin",
     "default_popup": "popup.html"
   },
   "commands": {
@@ -71,7 +71,7 @@
   "incognito": "split",
   "manifest_version": 2,
   "minimum_chrome_version": "55.0",
-  "name": "uBlock Origin",
+  "name": "Peach uBlock Origin",
   "options_ui": {
     "page": "dashboard.html",
     "open_in_tab": true
