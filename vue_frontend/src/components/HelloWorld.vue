@@ -38,7 +38,7 @@ export default {
     greet: function (event) {
       this.port.postMessage("Hi BackGround");
       let self = this;
-      port.onMessage.addListener(function(msg) {
+      this.port.onMessage.addListener(function(msg) {
           self.blockedRequestCount = msg.uBlock.localSettings.blockedRequestCount;
           self.allowedRequestCount = msg.uBlock.localSettings.allowedRequestCount;
           alert(`self.blockedRequestCount=${self.blockedRequestCount}`);
