@@ -133,8 +133,17 @@ export default {
   },
   methods: {
     testme() {
-      this.pageState = !this.pageState;
-      this.port.postMessage({from: "Peach", function: "getData"});
+      let newPageState = !this.pageState;
+      this.pageState = newPageState;
+      this.port.postMessage(
+        {from: "Peach", 
+        function: "toggleNetFiltering",
+        params: {
+          url: this.pageURL,
+          scope: '',
+          state: newPageState,
+        }
+        });
       /*
       let self = this;
       this.port.onMessage.addListener(function(msg) {

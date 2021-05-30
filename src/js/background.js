@@ -90,9 +90,25 @@ chrome.extension.onConnect.addListener(function(port) {
         if (!(msg.from === "Peach")) {
             return;
         }
+        console.log("message recieved ", msg);
+        if (msg.function === "toggleNetFiltering")
+        {
+            const tab = await vAPI.tabs.getCurrent();
+            if (tab) {
+                let tabId = tab.id;
+                let pageStore = µBlock.pageStoreFromTabId(tabId);
+                if ( pageStore ) {
+                    pageStore.toggleNetFilteringSwitch(
+                        msg.params.url,
+                        msg.params.scope,
+                        msg.params.state
+                    );
+                    µBlock.updateToolbarIcon(tabId, 0b111);
+                }
+            }
+        }
         if (msg.function === "getData")
         {
-            console.log("message recieved ", msg);
             // Get the current tab
             let pageCounts = null;
             let pageHostname = null;
