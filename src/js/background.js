@@ -107,6 +107,19 @@ chrome.extension.onConnect.addListener(function(port) {
                 }
             }
         }
+        if (msg.function === "refreshPage")
+        {
+            const tab = await vAPI.tabs.getCurrent();
+            if (tab) {
+                let tabId = tab.id;
+                if ( vAPI.isBehindTheSceneTabId(tabId) === false ) {
+                    vAPI.tabs.reload(tabId, /*request.bypassCache ===*/ true);
+                    if ( /*request.select &&*/ vAPI.tabs.select ) {
+                        vAPI.tabs.select(tabId);
+                    }
+                }
+            }
+        }
         if (msg.function === "getData")
         {
             // Get the current tab

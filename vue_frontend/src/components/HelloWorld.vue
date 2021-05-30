@@ -1,6 +1,7 @@
 <template>
   <div>
-    <button v-bind:style="{fontSize: '80px', color: pageStateColor}" v-on:click=testme>P</button>
+    <p><button v-bind:style="{fontSize: '80px', color: pageStateColor}" v-on:click=testme>P</button></p>
+    <p><button v-if="netFilterEverToggled" v-on:click=refreshPage>Refresh</button></p>
     <p>Current domain: {{pageHostname}}</p>
     <p>Blocked on this page: {{blockedOnThisPage}}</p>
     <!-- I couldn't get this Domains Connected thing to work so disabling for now
@@ -123,7 +124,8 @@ export default {
       touchedDomainCount: "Loading",
       allDomainCount: "Loading",
       pageState: true,
-      pageURL: null
+      pageURL: null,
+      netFilterEverToggled: false
     }
   },
   computed: {
@@ -144,6 +146,7 @@ export default {
           state: newPageState,
         }
         });
+      this.netFilterEverToggled = true;
       /*
       let self = this;
       this.port.onMessage.addListener(function(msg) {
@@ -202,6 +205,13 @@ export default {
       //uDom.nodeFromSelector(
       //    '[data-i18n^="popupDomainsConnected"] + span'
       //).textContent = summary;
+    },
+    refreshPage() {
+      this.port.postMessage(
+      {
+        from: "Peach", 
+        function: "refreshPage"
+      });
     }
 
   }
