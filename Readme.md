@@ -1,3 +1,10 @@
+To setup
+
+```
+cd vue_frontend
+npm install
+```
+
 To build run `./tools/make-chromium.sh`
 
 This will build the original uBlock-origin

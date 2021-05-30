@@ -58,16 +58,9 @@ function calculatePrivacyExposure(hostnameDict) {
     // Sort hostnames. First-party hostnames must always appear at the top
     // of the list.
     const desHostnameDone = {};
-    //console.log("hostnameDict1=", hostnameDict);
-    //console.log("typeof hostnameDict=", typeof hostnameDict);
-    //const keys = Object.keys(hostnameDict);
-    //console.log("Keys=", keys);
-    //for ( const des of keys ) {
     for (let [des, hnDetails] of hostnameDict) {
-        //console.log("des=", des);
         // Specific-type rules -- these are built-in
         if ( des === '*' || desHostnameDone.hasOwnProperty(des) ) { continue; }
-        //const hnDetails = hostnameDict[des];
         const { domain, counts } = hnDetails;
         if ( allDomains.hasOwnProperty(domain)) {
             allDomains[domain] = false;
@@ -113,8 +106,8 @@ chrome.extension.onConnect.addListener(function(port) {
             if (tab) {
                 let tabId = tab.id;
                 if ( vAPI.isBehindTheSceneTabId(tabId) === false ) {
-                    vAPI.tabs.reload(tabId, /*request.bypassCache ===*/ true);
-                    if ( /*request.select &&*/ vAPI.tabs.select ) {
+                    vAPI.tabs.reload(tabId, true);
+                    if ( vAPI.tabs.select ) {
                         vAPI.tabs.select(tabId);
                     }
                 }
@@ -135,11 +128,8 @@ chrome.extension.onConnect.addListener(function(port) {
                 let tabId = tab.id;
                 const tabContext = µBlock.tabContextManager.mustLookup(tabId);
                 const rootHostname = tabContext.rootHostname;
-                //console.log("tab=", tab);
                 pageHostname = rootHostname;
-                //console.log("pageHostname=", pageHostname);
                 pageDomain = tabContext.rootDomain;
-                //console.log("pageDomain=", pageDomain);
                 pageStore = µBlock.pageStoreFromTabId(tabId);
                 pageURL = tabContext.normalURL
                 if ( pageStore ) {
@@ -149,12 +139,7 @@ chrome.extension.onConnect.addListener(function(port) {
                     //console.log("hostnameDetails=", hostnameDetails);
                 }
             }
-            //console.log("hostnameDetails=", hostnameDetails);
             let {touchedDomainCount, allDomainCount} = calculatePrivacyExposure(hostnameDetails);
-            //console.log("touchedDomainCount=", touchedDomainCount);
-            //console.log("allDomainCount=", allDomainCount);
-            //console.log("pageStore=", pageStore);
-            //console.log("pageStore.toggleNetFilteringSwitch=", pageStore.toggleNetFilteringSwitch);
             console.log("netFilteringSwitch=", netFilteringSwitch);
 
             port.postMessage({uBlock: µBlock, info: {

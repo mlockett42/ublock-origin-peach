@@ -104,14 +104,6 @@ export default {
       self.blockedOnThisPage = formatBlocked(blocked, total);
       self.pageState = msg.info.netFilteringSwitch;
       self.pageURL = msg.info.pageURL;
-
-  /*
-      alert("1 mounted info=", );
-      let {touchedDomainCount, allDomainCount} = self.calculatePrivacyExposure(msg.info.hostnameDetails);
-      self.touchedDomainCount = touchedDomainCount;
-      self.allDomainCount = allDomainCount;
-      alert("2 mounted");
-      */
     });
   },
   data() {
@@ -147,16 +139,6 @@ export default {
         }
         });
       this.netFilterEverToggled = true;
-      /*
-      let self = this;
-      this.port.onMessage.addListener(function(msg) {
-        console.log("msg.info.hostnameDetails=",msg.info.hostnameDetails);
-        //let {touchedDomainCount, allDomainCount} = self.calculatePrivacyExposure(msg.info.hostnameDetails);
-        self.touchedDomainCount = msg.info.touchedDomainCount;
-        self.allDomainCount = msg.info.allDomainCount;
-        //self.pageState = msg.info.netFilteringSwitch;
-      });
-      */
     },
     calculatePrivacyExposure(hostnameDict) {
       let bg = chrome.extension.getBackgroundPage();
@@ -198,13 +180,6 @@ export default {
       }
 
       return {touchedDomainCount: touchedDomainCount.toLocaleString(), allDomainCount: allDomainCount.toLocaleString()};
-
-      //const summary = domainsHitStr
-      //    .replace('{{count}}', touchedDomainCount.toLocaleString())
-      //    .replace('{{total}}', allDomainCount.toLocaleString());
-      //uDom.nodeFromSelector(
-      //    '[data-i18n^="popupDomainsConnected"] + span'
-      //).textContent = summary;
     },
     refreshPage() {
       this.port.postMessage(
