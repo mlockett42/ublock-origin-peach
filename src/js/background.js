@@ -33,11 +33,89 @@ if ( vAPI.webextFlavor === undefined ) {
 
 /******************************************************************************/
 
-// Used by Oeach to communicate with uBlock origin
+// Used by Peach to communicate with uBlock origin
+
+/******************************************************************************/
+
+// greater-than-zero test
+
+const gtz = n => typeof n === 'number' && n > 0;
+
+/******************************************************************************/
+
+function calculatePrivacyExposure(hostnameDict) {
+    if (!hostnameDict) {
+        return {count: "", total: ""};
+    }
+
+    // From renderPrivacyExposure in ublock-origin
+    const allDomains = {};
+    let allDomainCount = 0;
+    let touchedDomainCount = 0;
+
+    let allHostnameRows = [];
+
+    // Sort hostnames. First-party hostnames must always appear at the top
+    // of the list.
+    const desHostnameDone = {};
+    console.log("hostnameDict1=", hostnameDict);
+    console.log("typeof hostnameDict=", typeof hostnameDict);
+    //const keys = Object.keys(hostnameDict);
+    //console.log("Keys=", keys);
+    //for ( const des of keys ) {
+    for (let [des, hnDetails] of hostnameDict) {
+        console.log("des=", des);
+        // Specific-type rules -- these are built-in
+        if ( des === '*' || desHostnameDone.hasOwnProperty(des) ) { continue; }
+        //const hnDetails = hostnameDict[des];
+        const { domain, counts } = hnDetails;
+        if ( allDomains.hasOwnProperty(domain)) {
+            allDomains[domain] = false;
+            allDomainCount += 1;
+        }
+        if ( gtz(counts.allowed.any) ) {
+            if ( allDomains[domain] === false ) {
+                allDomains[domain] = true;
+                touchedDomainCount += 1;
+            }
+        }
+        allHostnameRows.push(des);
+        desHostnameDone[des] = true;
+    };
+    return {touchedDomainCount: touchedDomainCount.toLocaleString(), allDomainCount: allDomainCount.toLocaleString()};
+};
+
 chrome.extension.onConnect.addListener(function(port) {
-    port.onMessage.addListener(function(msg) {
-        console.log("message recieved " + msg);
-        port.postMessage({text: "Hi Popup.js", what:"Peach", uBlock: µBlock});
+    port.onMessage.addListener(async function(msg) {
+        //console.log("message recieved " + msg);
+        // Get the current tab
+        let pageCounts = null;
+        let pageHostname = null;
+        let pageDomain = null;
+        let hostnameDetails = null;
+        const tab = await vAPI.tabs.getCurrent();
+        if (tab) {
+            let tabId = tab.id;
+            const tabContext = µBlock.tabContextManager.mustLookup(tabId);
+            const rootHostname = tabContext.rootHostname;
+            //console.log("tab=", tab);
+            pageHostname = rootHostname;
+            //console.log("pageHostname=", pageHostname);
+            pageDomain = tabContext.rootDomain;
+            //console.log("pageDomain=", pageDomain);
+            const pageStore = µBlock.pageStoreFromTabId(tabId);
+            if ( pageStore ) {
+                pageCounts = pageStore.counts;
+                hostnameDetails = pageStore.getAllHostnameDetails();
+                //console.log("hostnameDetails=", hostnameDetails);
+            }
+        }
+        console.log("hostnameDetails=", hostnameDetails);
+        let {touchedDomainCount, allDomainCount} = calculatePrivacyExposure(hostnameDetails);
+        console.log("touchedDomainCount=", touchedDomainCount);
+        console.log("allDomainCount=", allDomainCount);
+
+        port.postMessage({uBlock: µBlock, info: {pageHostname, pageDomain, pageCounts, touchedDomainCount, allDomainCount}});
     });
 });
 
