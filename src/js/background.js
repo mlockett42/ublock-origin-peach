@@ -58,13 +58,13 @@ function calculatePrivacyExposure(hostnameDict) {
     // Sort hostnames. First-party hostnames must always appear at the top
     // of the list.
     const desHostnameDone = {};
-    console.log("hostnameDict1=", hostnameDict);
-    console.log("typeof hostnameDict=", typeof hostnameDict);
+    //console.log("hostnameDict1=", hostnameDict);
+    //console.log("typeof hostnameDict=", typeof hostnameDict);
     //const keys = Object.keys(hostnameDict);
     //console.log("Keys=", keys);
     //for ( const des of keys ) {
     for (let [des, hnDetails] of hostnameDict) {
-        console.log("des=", des);
+        //console.log("des=", des);
         // Specific-type rules -- these are built-in
         if ( des === '*' || desHostnameDone.hasOwnProperty(des) ) { continue; }
         //const hnDetails = hostnameDict[des];
@@ -87,35 +87,58 @@ function calculatePrivacyExposure(hostnameDict) {
 
 chrome.extension.onConnect.addListener(function(port) {
     port.onMessage.addListener(async function(msg) {
-        //console.log("message recieved " + msg);
-        // Get the current tab
-        let pageCounts = null;
-        let pageHostname = null;
-        let pageDomain = null;
-        let hostnameDetails = null;
-        const tab = await vAPI.tabs.getCurrent();
-        if (tab) {
-            let tabId = tab.id;
-            const tabContext = µBlock.tabContextManager.mustLookup(tabId);
-            const rootHostname = tabContext.rootHostname;
-            //console.log("tab=", tab);
-            pageHostname = rootHostname;
-            //console.log("pageHostname=", pageHostname);
-            pageDomain = tabContext.rootDomain;
-            //console.log("pageDomain=", pageDomain);
-            const pageStore = µBlock.pageStoreFromTabId(tabId);
-            if ( pageStore ) {
-                pageCounts = pageStore.counts;
-                hostnameDetails = pageStore.getAllHostnameDetails();
-                //console.log("hostnameDetails=", hostnameDetails);
-            }
+        if (!(msg.from === "Peach")) {
+            return;
         }
-        console.log("hostnameDetails=", hostnameDetails);
-        let {touchedDomainCount, allDomainCount} = calculatePrivacyExposure(hostnameDetails);
-        console.log("touchedDomainCount=", touchedDomainCount);
-        console.log("allDomainCount=", allDomainCount);
+        if (msg.function === "getData")
+        {
+            console.log("message recieved ", msg);
+            // Get the current tab
+            let pageCounts = null;
+            let pageHostname = null;
+            let pageDomain = null;
+            let hostnameDetails = null;
+            let pageStore = null;
+            let netFilteringSwitch = false;
+            let pageURL = null;
+            const tab = await vAPI.tabs.getCurrent();
+            if (tab) {
+                let tabId = tab.id;
+                const tabContext = µBlock.tabContextManager.mustLookup(tabId);
+                const rootHostname = tabContext.rootHostname;
+                //console.log("tab=", tab);
+                pageHostname = rootHostname;
+                //console.log("pageHostname=", pageHostname);
+                pageDomain = tabContext.rootDomain;
+                //console.log("pageDomain=", pageDomain);
+                pageStore = µBlock.pageStoreFromTabId(tabId);
+                pageURL = tabContext.normalURL
+                if ( pageStore ) {
+                    pageCounts = pageStore.counts;
+                    hostnameDetails = pageStore.getAllHostnameDetails();
+                    netFilteringSwitch = pageStore.getNetFilteringSwitch();
+                    //console.log("hostnameDetails=", hostnameDetails);
+                }
+            }
+            //console.log("hostnameDetails=", hostnameDetails);
+            let {touchedDomainCount, allDomainCount} = calculatePrivacyExposure(hostnameDetails);
+            //console.log("touchedDomainCount=", touchedDomainCount);
+            //console.log("allDomainCount=", allDomainCount);
+            //console.log("pageStore=", pageStore);
+            //console.log("pageStore.toggleNetFilteringSwitch=", pageStore.toggleNetFilteringSwitch);
+            console.log("netFilteringSwitch=", netFilteringSwitch);
 
-        port.postMessage({uBlock: µBlock, info: {pageHostname, pageDomain, pageCounts, touchedDomainCount, allDomainCount}});
+            port.postMessage({uBlock: µBlock, info: {
+                pageHostname, 
+                pageDomain, 
+                pageCounts, 
+                touchedDomainCount, 
+                allDomainCount,
+                pageStore,
+                netFilteringSwitch,
+                pageURL
+            }});
+        }
     });
 });
 

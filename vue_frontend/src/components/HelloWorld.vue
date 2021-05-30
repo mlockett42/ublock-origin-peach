@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button style="font-size: 80px;color: blue;" v-on:click=testme>P</button>
+    <button v-bind:style="{fontSize: '80px', color: pageStateColor}" v-on:click=testme>P</button>
     <p>Current domain: {{pageHostname}}</p>
     <p>Blocked on this page: {{blockedOnThisPage}}</p>
     <!-- I couldn't get this Domains Connected thing to work so disabling for now
@@ -81,7 +81,7 @@ export default {
     this.port = chrome.extension.connect({
       name: "Peach Fruitful Browsing"
     });
-    this.port.postMessage("Hi BackGround");
+    this.port.postMessage({from: "Peach", function: "getData"});
     let self = this;
     this.port.onMessage.addListener(function(msg) {
       self.blockedRequestCount = formatBlocked(
@@ -101,6 +101,8 @@ export default {
         total = 0;
       }
       self.blockedOnThisPage = formatBlocked(blocked, total);
+      self.pageState = msg.info.netFilteringSwitch;
+      self.pageURL = msg.info.pageURL;
 
   /*
       alert("1 mounted info=", );
@@ -119,19 +121,30 @@ export default {
       blockedOnThisPage: "Loading",
       port: null,
       touchedDomainCount: "Loading",
-      allDomainCount: "Loading"
+      allDomainCount: "Loading",
+      pageState: true,
+      pageURL: null
+    }
+  },
+  computed: {
+    pageStateColor: function () {
+      return this.pageState ? "blue" : "gray";
     }
   },
   methods: {
     testme() {
-      this.port.postMessage("Hi BackGround");
+      this.pageState = !this.pageState;
+      this.port.postMessage({from: "Peach", function: "getData"});
+      /*
       let self = this;
       this.port.onMessage.addListener(function(msg) {
         console.log("msg.info.hostnameDetails=",msg.info.hostnameDetails);
         //let {touchedDomainCount, allDomainCount} = self.calculatePrivacyExposure(msg.info.hostnameDetails);
         self.touchedDomainCount = msg.info.touchedDomainCount;
         self.allDomainCount = msg.info.allDomainCount;
+        //self.pageState = msg.info.netFilteringSwitch;
       });
+      */
     },
     calculatePrivacyExposure(hostnameDict) {
       let bg = chrome.extension.getBackgroundPage();
