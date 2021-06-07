@@ -1,32 +1,49 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
-  </div>
+  <v-app id="app">
+    <dashboard />
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+// import Onboarding from "./components/Onboarding.vue";
+import Dashboard from "./components/Dashboard.vue";
+
+import store from "./store";
+
+export default {
+  name: "App",
+  components: {
+    // Onboarding,
+    Dashboard,
+  },
+  data() {
+    return {
+      onboarding: true,
+    };
+  },
+  created() {
+    this.onboarding = store.state.globalNavigation.onboarding;
+  },
+};
+</script>
+
+<style>
+/* @font-face {
+  font-family: glacial;
+  src: url("assets/GlacialIndifference.otf") format("opentype");
+}
+@font-face {
+  font-family: leaguespartan;
+  src: url("assets/LeagueSpartan-Bold.otf") format("opentype");
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+@font-face {
+  font-family: moresugar;
+  src: url("assets/MoreSugar-Thin.ttf") format("truetype");
+} */
+#app {
+  position: relative;
+  width: 350px;
+  height: 550px;
 }
 </style>
