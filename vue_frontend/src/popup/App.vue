@@ -51,4 +51,11 @@ html {
   width: 350px;
   height: 550px;
 }
+#app .v-card__text {
+  font-family: glacial !important;
+  font-size: 15px !important;
+}
+#app .text-h6 {
+  font-family: leaguespartan !important;
+}
 </style>

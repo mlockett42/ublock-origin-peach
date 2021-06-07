@@ -11,5 +11,9 @@ echo "Copying Javascript"
 cp ./vue_frontend/dist/js/popup.* ./dist/build/uBlock0.chromium/js -v
 cp ./vue_frontend/dist/js/chunk-vendors.* ./dist/build/uBlock0.chromium/js -v
 
-echo "Copying Javascript"
+echo "Copying CSS"
 cp ./vue_frontend/dist/css/popup.* ./dist/build/uBlock0.chromium/css -v
+
+echo "Copying Fonts"
+cp ./vue_frontend/dist/fonts/* ./dist/build/uBlock0.chromium/fonts -v
+
