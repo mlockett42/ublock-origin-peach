@@ -9,12 +9,10 @@ export default new Vuetify({
 			light: {
 				primary: '#d98150',
 				secondary: '#f5b18e',
-				error: '#fff',
 			},
 			dark: {
 				primary: '#d98150',
 				secondary: '#f5b18e',
-				error: '#fff',
 			},
 		},
 	},
