@@ -28,7 +28,7 @@
                 <v-btn
                   fab
                   small
-                  v-on:click="testme()"
+                  v-on:click="toggleOnOff()"
                   style="box-shadow: 0px 0px 8px 0px #cccccc"
                 >
                   <v-icon v-if="pageState" color="primary">mdi-pause</v-icon>
@@ -271,10 +271,7 @@ export default {
     },
   },
   methods: {
-    toggleIsActive() {
-      this.isActive = !this.isActive;
-    },
-    testme() {
+    toggleOnOff() {
       let newPageState = !this.pageState;
       this.pageState = newPageState;
       this.port.postMessage({
