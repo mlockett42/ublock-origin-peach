@@ -1,11 +1,5 @@
-// let path = require("path");
-
 module.exports = {
-  // From https://stackoverflow.com/a/53349027
-  // outputDir: path.resolve(__dirname, "./dist"),
-
   assetsDir: ".",
-
   pages: {
     popup: {
       template: "public/browser-extension.html",
@@ -33,7 +27,6 @@ module.exports = {
       },
     },
   },
-
   transpileDependencies: [
     'vuetify'
   ]
