@@ -1,7 +1,4 @@
-const path = require("path");
-
 module.exports = {
-  outputDir: path.resolve(__dirname, "./dist"), // From https://stackoverflow.com/a/53349027
   assetsDir: ".",
   pages: {
     popup: {
@@ -15,6 +12,7 @@ module.exports = {
     //   title: "Options",
     // },
   },
+
   pluginOptions: {
     browserExtension: {
       componentOptions: {
@@ -29,4 +27,7 @@ module.exports = {
       },
     },
   },
+  transpileDependencies: [
+    'vuetify'
+  ]
 };
