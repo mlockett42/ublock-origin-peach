@@ -1,3 +1,7 @@
+echo "Set up development config"
+
+cp ./vue_frontend/src/config/config.development.js ./vue_frontend/src/config/config.js
+
 echo "Build vuejs content"
 
 cd ./vue_frontend/src

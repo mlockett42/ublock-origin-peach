@@ -3,3 +3,5 @@
 /dist/build/
 /tmp/
 node_modules
+
+/vue_frontend/src/config/config.js
