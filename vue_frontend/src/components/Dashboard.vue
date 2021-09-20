@@ -78,13 +78,10 @@
                     ></v-card-text
                   >
                   <v-card-title class="text-h6 pt-0">
-                    new feature available
+                    Are we logged in?
                   </v-card-title>
                   <v-card-text
-                    >we're excited to announce that you can now change whether
-                    the plugin is on or off. This is great when blocking
-                    trackers prevents the site from working or if you'd like to
-                    support a website by viewing ads.</v-card-text
+                    >Peach key = {{ peachKey }}</v-card-text
                   >
                 </v-card>
               </v-col>
@@ -220,7 +217,7 @@ function formatBlocked(blocked, total) {
 
 export default {
   name: "Dashboard",
-  mounted() {
+  async mounted() {
     this.port = chrome.extension.connect({
       name: "Peach Fruitful Browsing",
     });
@@ -263,12 +260,13 @@ export default {
       pageState: true,
       pageURL: null,
       netFilterEverToggled: false,
+      peachKey: "LOADING"
     };
   },
   computed: {
     pageStateColor: function () {
       return this.pageState ? "blue" : "gray";
-    },
+    }
   },
   methods: {
     toggleOnOff() {

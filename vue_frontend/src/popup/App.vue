@@ -1,20 +1,23 @@
 <template>
   <v-app id="app">
-    <dashboard />
+    <onboarding v-if="onboarding"/>
+    <dashboard v-if="!onboarding"/>
   </v-app>
 </template>
 
 <script>
-// import Dashboard from '../components/Dashboard.vue';
-// import Onboarding from "./components/Onboarding.vue";
+import Onboarding from "../components/Onboarding.vue";
 import Dashboard from "../components/Dashboard.vue";
+
+//import { isLoggedInCorrectly } from "../services/loginService"
+import loginService from "../services/loginService"
 
 //import store from "./store";
 
 export default {
   name: "App",
   components: {
-    // Onboarding,
+    Onboarding,
     Dashboard,
   },
   data() {
@@ -22,8 +25,18 @@ export default {
       onboarding: true,
     };
   },
-  created() {
+  async mounted() {
+    // console.log("1. mounted called");
     // this.onboarding = store.state.globalNavigation.onboarding;
+    var bkg = chrome.extension.getBackgroundPage();
+    // bkg.console.log("2. mounted called loginService=", loginService);
+    let result = await loginService.isLoggedInCorrectly(bkg);
+    // bkg.console.log("3. isLoggedInCorrectly was called result=", result);
+    // chrome.storage.local.get(['PEACHKEY'], function(result) {
+    //   bkg.console.log("Callback result=", result);
+    //   });
+    // bkg.console.log("4. chrome.storage.local.get was called");
+    this.onboarding = !result;
   },
 };
 </script>
