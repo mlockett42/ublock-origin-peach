@@ -2,7 +2,7 @@ To setup
 
 ```
 cd vue_frontend
-npm install
+npm ci
 ```
 
 To build run `./tools/make-chromium.sh`

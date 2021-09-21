@@ -57,6 +57,9 @@
 </template>
 
 <script>
+
+import loginService from '../services/loginService';
+
 export default {
     name: "Login",
     data() {
@@ -67,8 +70,15 @@ export default {
         }
     },
     methods: {
-        login() {
-
+        async login() {
+            try {
+              let result = await loginService.login(this.$store, this.userName, this.password);
+              console.log("login result =", result);
+            }
+            catch (err)
+            {
+              console.log("login error err=", err);
+            }
         }
     }
 };
