@@ -72,12 +72,16 @@ export default {
     methods: {
         async login() {
             try {
-              let result = await loginService.login(this.$store, this.userName, this.password);
-              console.log("login result =", result);
+              await loginService.login(this.$store, this.userName, this.password);
             }
             catch (err)
             {
-              console.log("login error err=", err);
+              if (err.name === "LoginException") {
+                alert(`Could not login in. Message = ${err.message}`);
+              }
+              else {
+                throw err;
+              }
             }
         }
     }

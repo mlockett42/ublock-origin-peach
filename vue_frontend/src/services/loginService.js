@@ -5,6 +5,7 @@ import config from '../config/config.js'
 import passwordKeyService from '../services/passwordKeyService';
 import axios from 'axios';
 import nacl_util from 'tweetnacl-util';
+import loginExceptions from '../exceptions/LoginException.js'
 
 async function hasEverLoggedIn()
 {
@@ -59,7 +60,18 @@ async function attemptLogin(store, userName, hashedPassword) {
         loginCommand: encodedJsonCommand2,
         signature
     }
-    let result = await axios.post(new URL('/api/login', config.serverUrl), payload);
+    let result = null;
+    try
+    {
+      result = await axios.post(new URL('/api/login', config.serverUrl), payload);
+    }
+    catch (err)
+    {
+      if (err.response && err.response.status == 400) {
+        throw new loginExceptions.LoginException(err.response.data.message);
+      }
+      throw err;
+    }
     store.dispatch('authentication/loginSuccess', result.data.user,  result.data.bearerToken);
     return result;
 }
