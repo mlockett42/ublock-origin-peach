@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
-    <onboarding v-if="onboarding"/>
-    <dashboard v-if="!onboarding"/>
+    <onboarding v-if="!isLoggedInCorrectly"/>
+    <dashboard v-if="isLoggedInCorrectly"/>
   </v-app>
 </template>
 
@@ -9,10 +9,7 @@
 import Onboarding from "../components/Onboarding.vue";
 import Dashboard from "../components/Dashboard.vue";
 
-//import { isLoggedInCorrectly } from "../services/loginService"
 import loginService from "../services/loginService"
-
-//import store from "./store";
 
 export default {
   name: "App",
@@ -20,23 +17,13 @@ export default {
     Onboarding,
     Dashboard,
   },
-  data() {
-    return {
-      onboarding: true,
-    };
+  computed: {
+    isLoggedInCorrectly: function() {
+      return this.$store.state.authentication.status.loggedIn;
+    }
   },
   async mounted() {
-    // console.log("1. mounted called");
-    // this.onboarding = store.state.globalNavigation.onboarding;
-    var bkg = chrome.extension.getBackgroundPage();
-    // bkg.console.log("2. mounted called loginService=", loginService);
-    let result = await loginService.isLoggedInCorrectly(bkg);
-    // bkg.console.log("3. isLoggedInCorrectly was called result=", result);
-    // chrome.storage.local.get(['PEACHKEY'], function(result) {
-    //   bkg.console.log("Callback result=", result);
-    //   });
-    // bkg.console.log("4. chrome.storage.local.get was called");
-    this.onboarding = !result;
+    await loginService.isLoggedInCorrectly();
   },
 };
 </script>

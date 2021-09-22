@@ -2,7 +2,8 @@ export const authentication = {
     namespaced: true,
     state: {
         status: {},
-        user: null
+        user: null,
+        bearerToken: null
     },
     actions: {
         loginRequest({ commit }) {
@@ -11,8 +12,8 @@ export const authentication = {
         loginFailure({ commit }) {
             commit('loginFailure');
         },
-        loginSuccess({ commit }, user) {
-            commit('loginSuccess', user);
+        loginSuccess({ commit }, user, bearerToken) {
+            commit('loginSuccess', user, bearerToken);
         },
         logout({ commit }) {
             commit('logout');
@@ -22,18 +23,22 @@ export const authentication = {
         loginRequest(state) {
             state.status = { loggingIn: true };
             state.user = null;
+            state.bearerToken = null;
         },
-        loginSuccess(state, responseData) {
+        loginSuccess(state, user, bearerToken) {
             state.status = { loggedIn: true };
-            state.user = responseData.user;
+            state.user = user;
+            state.bearerToken = bearerToken;
         },
         loginFailure(state) {
             state.status = { loggedIn: false };
             state.user = null;
+            state.bearerToken = null;
         },
         logout(state) {
             state.status = { loggedIn: false };
             state.user = null;
+            state.bearerToken = null;
         }
     }
 }

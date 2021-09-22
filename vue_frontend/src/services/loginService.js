@@ -22,7 +22,11 @@ async function isLoggedInCorrectly(store)
 {
     try
     {
-      return await attemptLogin(store, chromeLocalStorageService.localStorageGet("PEACHUSERNAME"), !await chromeLocalStorageService.localStorageGet("PEACHKEY"));
+      return await hasEverLoggedIn() && 
+        await attemptLogin(store, 
+                           chromeLocalStorageService.localStorageGet("PEACHUSERNAME"), 
+                           !await chromeLocalStorageService.localStorageGet("PEACHKEY")
+        );
     }
     catch(err)
     {
@@ -47,15 +51,17 @@ async function attemptLogin(store, userName, hashedPassword) {
 
     let signature = passwordKeyService.SignString(jsonCommand, privateKey);
 
-    let encodedJsonComannd1 = (new TextEncoder()).encode(jsonCommand);
+    let encodedJsonCommand1 = (new TextEncoder()).encode(jsonCommand);
 
-    let encodedJsonComannd2 = nacl_util.encodeBase64(encodedJsonComannd1);
+    let encodedJsonCommand2 = nacl_util.encodeBase64(encodedJsonCommand1);
 
     let payload = {
-        loginCommand: encodedJsonComannd2,
+        loginCommand: encodedJsonCommand2,
         signature
     }
-    return await axios.post(new URL('/api/login', config.serverUrl), payload);
+    let result = await axios.post(new URL('/api/login', config.serverUrl), payload);
+    store.dispatch('authentication/loginSuccess', result.data.user,  result.data.bearerToken);
+    return result;
 }
 
 function login(store, username, password) {
