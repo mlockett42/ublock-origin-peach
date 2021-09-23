@@ -21,18 +21,23 @@ async function hasEverLoggedIn()
 
 async function isLoggedInCorrectly(store)
 {
-    try
+  try
+  {
+    if (!await hasEverLoggedIn())
     {
-      return await hasEverLoggedIn() && 
-        await attemptLogin(store, 
-                           chromeLocalStorageService.localStorageGet("PEACHUSERNAME"), 
-                           !await chromeLocalStorageService.localStorageGet("PEACHKEY")
-        );
+      return;
     }
-    catch(err)
-    {
-      return false;
-    }
+    
+    await attemptLogin(store, 
+                        await chromeLocalStorageService.localStorageGet("PEACHUSERNAME"), 
+                        await chromeLocalStorageService.localStorageGet("PEACHKEY")
+    );
+    return true;
+  }
+  catch(err)
+  {
+    return false;
+  }
 }
 
 async function attemptLogin(store, userName, hashedPassword) {
@@ -73,6 +78,8 @@ async function attemptLogin(store, userName, hashedPassword) {
       throw err;
     }
     store.dispatch('authentication/loginSuccess', result.data.user,  result.data.bearerToken);
+    await chromeLocalStorageService.localStorageSet("PEACHUSERNAME", userName);
+    await chromeLocalStorageService.localStorageSet("PEACHKEY", hashedPassword);
     return result;
 }
 
@@ -80,8 +87,15 @@ function login(store, username, password) {
   return attemptLogin(store, username, password);
 }
 
+async function logout(store) {
+  await chromeLocalStorageService.localStorageSet("PEACHUSERNAME", null);
+  await chromeLocalStorageService.localStorageSet("PEACHKEY", null);
+  store.dispatch('authentication/logout');
+}
+
 export default {
     isLoggedInCorrectly,
     hasEverLoggedIn,
-    login
+    login,
+    logout
 }

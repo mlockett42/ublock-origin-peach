@@ -23,7 +23,7 @@ export default {
     }
   },
   async mounted() {
-    await loginService.isLoggedInCorrectly();
+    await loginService.isLoggedInCorrectly(this.$store);
   },
 };
 </script>

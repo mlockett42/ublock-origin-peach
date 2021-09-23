@@ -86,6 +86,9 @@
                 </v-card>
               </v-col>
             </v-row>
+            <v-row v-if="tab == 2">
+              <settings/>
+            </v-row>
             <v-row v-if="tab == 3">
               <v-col class>
                 <v-card
@@ -215,8 +218,13 @@ function formatBlocked(blocked, total) {
   return text;
 }
 
+import Settings from "../components/Settings.vue";
+
 export default {
   name: "Dashboard",
+  components: {
+    Settings,
+  },
   async mounted() {
     this.port = chrome.extension.connect({
       name: "Peach Fruitful Browsing",
