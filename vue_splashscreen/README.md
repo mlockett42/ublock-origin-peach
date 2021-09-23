@@ -1,4 +1,4 @@
-# vue_splashscreen
+# vue_splashscreen 
 
 ## Project setup
 ```
