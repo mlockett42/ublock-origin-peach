@@ -108,9 +108,4 @@ export default {
     rgba(245, 177, 142, 1) 100%
   );
 }
-/* .ad-bg {
-  background-image: url("./assets/launchpad.jpg") !important;
-  background-position: center;
-  background-size: cover;
-} */
 </style>
