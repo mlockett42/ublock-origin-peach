@@ -72,7 +72,7 @@
                   color="primary--text"
                   style="box-shadow: 0px 0px 8px 0px #cccccc"
                 >
-                  <v-card-text class="pb-0 primary--text"
+                  <!-- <v-card-text class="pb-0 primary--text"
                     ><span style="font-family: moresugar"
                       >June 6th</span
                     ></v-card-text
@@ -82,7 +82,7 @@
                   </v-card-title>
                   <v-card-text
                     >Peach key = {{ peachKey }}</v-card-text
-                  >
+                  > -->
                 </v-card>
               </v-col>
             </v-row>
