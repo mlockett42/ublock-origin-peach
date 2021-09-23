@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import loginService from '../services/loginService';
 export default {
     name: "Register",
     data() {
@@ -85,8 +86,20 @@ export default {
         }
     },
     methods: {
-        createAccount() {
-
+        async createAccount() {
+            if (this.password1 !== this.password2) {
+                alert("Passwords must match");
+                return;
+            }
+            let pattern = /^.*@((.*.\.uwa\.edu\.au)|uwa\.edu\.au)$|^.*@deliveryengine.net$/;
+            if (this.userName.match(pattern) == null) {
+                // The signing key did not match
+                alert("Invalid email address. Only *.uwa.edu.au is allowed");
+                return;
+            }
+            await loginService.createUser(this.userName, this.password1);
+            await loginService.login(this.$store, this.userName, this.password1);
+            alert("User was successfully created. You will receive an email to validate the account.")
         }
     }
 };

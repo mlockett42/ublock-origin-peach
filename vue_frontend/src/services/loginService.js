@@ -94,9 +94,43 @@ async function logout(store) {
   store.dispatch('authentication/logout');
 }
 
+async function createUser(userName, password)
+{
+  let resp = await axios.get(new URL('/api/challengecode', config.serverUrl));
+  let challengeCode = resp.data;
+
+  let keys = await passwordKeyService.GenerateNaclKeys(userName, password);
+  let privateKey = keys.naclSigningKeyPairBase64.secretKey;
+  let publicKey = keys.naclSigningKeyPairBase64.publicKey;
+
+  let createUserCommand = {
+      name: userName,
+      challengeCode: challengeCode,
+      publicKey: publicKey
+    };
+  let jsonCommand = JSON.stringify(createUserCommand);
+  let signature = passwordKeyService.SignString(jsonCommand, privateKey);
+  jsonCommand = (new TextEncoder()).encode(jsonCommand);
+  
+  let payload = {
+      createUserCommand: nacl_util.encodeBase64(jsonCommand),
+      signature
+  }
+  try {
+      resp = await axios.post(new URL('/api/createLogin', config.serverUrl), payload);
+  }
+  catch (err) {
+      alert("There was an error err.data.message=", err.response.data.message);
+      return false;
+  }
+  return true;
+}
+
+
 export default {
     isLoggedInCorrectly,
     hasEverLoggedIn,
     login,
-    logout
+    logout,
+    createUser
 }
