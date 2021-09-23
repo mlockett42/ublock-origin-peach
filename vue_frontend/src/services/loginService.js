@@ -11,7 +11,7 @@ async function hasEverLoggedIn()
 {
   try
   {
-    return !(!await chromeLocalStorageService.localStorageGet("PEACHUSERNAME") && !await chromeLocalStorageService.localStorageGet("PEACHKEY"));
+    return await chromeLocalStorageService.localStorageGet("PEACHHASEVERLOGGEDIN");
   }
   catch(err)
   {
@@ -80,6 +80,7 @@ async function attemptLogin(store, userName, hashedPassword) {
     store.dispatch('authentication/loginSuccess', result.data.user,  result.data.bearerToken);
     await chromeLocalStorageService.localStorageSet("PEACHUSERNAME", userName);
     await chromeLocalStorageService.localStorageSet("PEACHKEY", hashedPassword);
+    await chromeLocalStorageService.localStorageSet("PEACHHASEVERLOGGEDIN", true);
     return result;
 }
 
