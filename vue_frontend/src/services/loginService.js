@@ -41,7 +41,7 @@ async function isLoggedInCorrectly(store)
 }
 
 async function attemptLogin(store, userName, hashedPassword) {
-    let keys = await passwordKeyService.GenerateNaclKeys(userName, hashedPassword);
+    let keys = await passwordKeyService.GenerateNaclKeysFromHashedPassword(userName, await passwordKeyService.HashPassword(hashedPassword));
     let privateKey = keys.naclSigningKeyPairBase64.secretKey;
     let publicKey = keys.naclSigningKeyPairBase64.publicKey;
 
@@ -99,7 +99,7 @@ async function createUser(userName, password)
   let resp = await axios.get(new URL('/api/challengecode', config.serverUrl));
   let challengeCode = resp.data;
 
-  let keys = await passwordKeyService.GenerateNaclKeys(userName, password);
+  let keys = await passwordKeyService.GenerateNaclKeysFromHashedPassword(userName, await passwordKeyService.HashPassword(password));
   let privateKey = keys.naclSigningKeyPairBase64.secretKey;
   let publicKey = keys.naclSigningKeyPairBase64.publicKey;
 

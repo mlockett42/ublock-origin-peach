@@ -9,7 +9,10 @@
 import Onboarding from "../components/Onboarding.vue";
 import Dashboard from "../components/Dashboard.vue";
 
-import loginService from "../services/loginService"
+import loginService from "../services/loginService";
+
+require("setimmediate");  // (somewhere early in your app; it attaches to the global scope.)
+
 
 export default {
   name: "App",

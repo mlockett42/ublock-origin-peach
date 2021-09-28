@@ -3,6 +3,7 @@
 const nacl = require('tweetnacl');
 const nacl_util = require('tweetnacl-util');
 const sessionKeys = require('session-keys');
+const { scrypt } = require('./scryptPromise')
 
 function GetSigningHash(stringToSign) {
     let expectedHash=new Uint8Array(stringToSign.length);
@@ -30,7 +31,14 @@ function VerifySignatureString(signature, publicKey) {
     return nacl.sign.open(decodedSignature, decodedPublicKey);
 }
 
-function GenerateNaclKeys(userName, password) 
+async function HashPassword(password)
+{
+  let promise = scrypt(password.normalize('NFKC'), "PEACH", 32);
+  return nacl_util.encodeBase64(await promise);
+}
+
+
+function GenerateNaclKeysFromHashedPassword(userName, password) 
 {
   let promise = new Promise(function(resolve, reject) {
     sessionKeys.generate(userName, password, function(err, keys) {
@@ -58,5 +66,6 @@ function GenerateNaclKeys(userName, password)
 export default {
     SignString,
     VerifySignatureString,
-    GenerateNaclKeys
+    GenerateNaclKeysFromHashedPassword,
+    HashPassword
 }
