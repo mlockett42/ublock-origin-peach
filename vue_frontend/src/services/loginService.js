@@ -41,7 +41,7 @@ async function isLoggedInCorrectly(store)
 }
 
 async function attemptLogin(store, userName, hashedPassword) {
-    let keys = await passwordKeyService.GenerateNaclKeysFromHashedPassword(userName, await passwordKeyService.HashPassword(hashedPassword));
+    let keys = await passwordKeyService.GenerateNaclKeysFromHashedPassword(userName, hashedPassword);
     let privateKey = keys.naclSigningKeyPairBase64.secretKey;
     let publicKey = keys.naclSigningKeyPairBase64.publicKey;
 
@@ -84,8 +84,8 @@ async function attemptLogin(store, userName, hashedPassword) {
     return result;
 }
 
-function login(store, username, password) {
-  return attemptLogin(store, username, password);
+async function login(store, username, password) {
+  return await attemptLogin(store, username, await passwordKeyService.HashPassword(password));
 }
 
 async function logout(store) {
