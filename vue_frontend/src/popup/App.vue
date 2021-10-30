@@ -1,29 +1,32 @@
 <template>
   <v-app id="app">
-    <dashboard />
+    <onboarding v-if="!isLoggedInCorrectly"/>
+    <dashboard v-if="isLoggedInCorrectly"/>
   </v-app>
 </template>
 
 <script>
-// import Dashboard from '../components/Dashboard.vue';
-// import Onboarding from "./components/Onboarding.vue";
+import Onboarding from "../components/Onboarding.vue";
 import Dashboard from "../components/Dashboard.vue";
 
-//import store from "./store";
+import loginService from "../services/loginService";
+
+require("setimmediate");  // (somewhere early in your app; it attaches to the global scope.)
+
 
 export default {
   name: "App",
   components: {
-    // Onboarding,
+    Onboarding,
     Dashboard,
   },
-  data() {
-    return {
-      onboarding: true,
-    };
+  computed: {
+    isLoggedInCorrectly: function() {
+      return this.$store.state.authentication.status.loggedIn;
+    }
   },
-  created() {
-    // this.onboarding = store.state.globalNavigation.onboarding;
+  async mounted() {
+    await loginService.isLoggedInCorrectly(this.$store);
   },
 };
 </script>
