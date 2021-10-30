@@ -24,7 +24,7 @@
           <v-chip
             v-for="period in periods"
             :key="period"
-            style="align-self: right; font-family: moresugar; font-weight: 400"
+            style="align-self: right; font-family: More Sugar; font-weight: 400"
             text-color="#d98150"
           >
             {{ period }}

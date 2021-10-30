@@ -24,7 +24,7 @@
           <v-chip
             v-for="tag in tags"
             :key="tag"
-            style="align-self: right; font-family: moresugar; font-weight: 400"
+            style="align-self: right; font-family: More Sugar; font-weight: 400"
             text-color="#d98150"
           >
             {{ tag }}
@@ -92,7 +92,7 @@
               color="white"
               style="
                 align-self: right;
-                font-family: moresugar;
+                font-family: More Sugar;
                 font-weight: 400;
                 color: #d98150;
               "

@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
-    <onboarding v-if="!isLoggedInCorrectly"/>
-    <dashboard v-if="isLoggedInCorrectly"/>
+    <onboarding v-if="!isLoggedInCorrectly" />
+    <dashboard v-if="isLoggedInCorrectly" />
   </v-app>
 </template>
 
@@ -11,8 +11,7 @@ import Dashboard from "../components/Dashboard.vue";
 
 import loginService from "../services/loginService";
 
-require("setimmediate");  // (somewhere early in your app; it attaches to the global scope.)
-
+require("setimmediate"); // (somewhere early in your app; it attaches to the global scope.)
 
 export default {
   name: "App",
@@ -21,9 +20,9 @@ export default {
     Dashboard,
   },
   computed: {
-    isLoggedInCorrectly: function() {
+    isLoggedInCorrectly: function () {
       return this.$store.state.authentication.status.loggedIn;
-    }
+    },
   },
   async mounted() {
     await loginService.isLoggedInCorrectly(this.$store);
@@ -33,16 +32,16 @@ export default {
 
 <style>
 @font-face {
-  font-family: glacial;
+  font-family: "Glacial Indifference";
   src: url("../assets/fonts/GlacialIndifference.otf") format("opentype");
 }
 @font-face {
-  font-family: leaguespartan;
+  font-family: "League Spartan";
   src: url("../assets/fonts/LeagueSpartan-Bold.otf") format("opentype");
 }
 
 @font-face {
-  font-family: moresugar;
+  font-family: "More Sugar";
   src: url("../assets/fonts/MoreSugar-Thin.ttf") format("truetype");
 }
 html {

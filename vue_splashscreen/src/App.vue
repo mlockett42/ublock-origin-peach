@@ -97,7 +97,7 @@ export default {
 }
 
 @font-face {
-  font-family: moresugar;
+  font-family: More Sugar;
   src: url("./assets/fonts/MoreSugar-Thin.ttf") format("truetype");
 }
 .gradient-bg {

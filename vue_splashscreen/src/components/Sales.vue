@@ -57,7 +57,7 @@
               color="white"
               style="
                 align-self: right;
-                font-family: moresugar;
+                font-family: More Sugar;
                 font-weight: 400;
                 color: #d98150;
               "
