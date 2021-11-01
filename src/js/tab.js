@@ -873,6 +873,7 @@ vAPI.Tabs = class extends vAPI.Tabs {
     //   reason for this is that we need the effective URL and this information
     //   is not available at this point.
     onNavigation(details) {
+        console.log("vAPI.Tabs.onNavigation called details.url=", details.url);
         super.onNavigation(details);
         const µb = µBlock;
         const { frameId, tabId, url } = details;
