@@ -12,12 +12,12 @@ async function getEndPeachHistoryIndex()
   }
 }
 
-async function storePeachHistoryIndex(newEndAt, url)
+async function storePeachHistoryIndex(endAt, url)
 {
   try
   {
-    await µBlock.localStorageSet(`PEACHHISTORYINDEXEND`, newEndAt);
-    await µBlock.localStorageSet(`PEACHHISTORY${newEndAt}`, { url, at: Date.now()})
+    await µBlock.localStorageSet(`PEACHHISTORYINDEXEND`, endAt + 1);
+    await µBlock.localStorageSet(`PEACHHISTORY${endAt}`, { url, at: Date.now()})
   }
   catch(err)
   {
@@ -29,10 +29,10 @@ async function storePeachHistoryIndex(newEndAt, url)
     let endAt = await getEndPeachHistoryIndex();
     console.log(`storeUrl ${endAt}`);
 
-    let nextAt = endAt + 1;
+    //let nextAt = endAt + 1;
 
-    await storePeachHistoryIndex(nextAt, url);
+    await storePeachHistoryIndex(endAt, url);
 
-    console.log(`storeUrl done nextAt=${nextAt} url=${url}`)
+    console.log(`storeUrl done endAt=${endAt} url=${url}`)
 }
 

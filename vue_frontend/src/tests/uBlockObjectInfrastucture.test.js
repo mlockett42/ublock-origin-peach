@@ -41,7 +41,7 @@ describe("verify_we_can_load_files_intended_for_background_page", () => {
         expect(localStorageSet.mock.calls.length).toBe(2);
         expect(localStorageSet.mock.calls[0][0]).toBe("PEACHHISTORYINDEXEND");
         expect(localStorageSet.mock.calls[0][1]).toBe(1);
-        expect(localStorageSet.mock.calls[1][0]).toBe("PEACHHISTORY1");
+        expect(localStorageSet.mock.calls[1][0]).toBe("PEACHHISTORY0");
         var dataParam = localStorageSet.mock.calls[1][1];
         expect(dataParam.url).toBe("https://www.google.com");
         expect(dataParam.at).toBe((new Date('2021-06-10T00:00:00Z')).getTime());
