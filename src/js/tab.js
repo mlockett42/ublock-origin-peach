@@ -21,6 +21,54 @@
 
 'use strict';
 
+async function getStartPeachHistoryIndex()
+{
+  try
+  {
+    return await µBlock.localStorageGet(`PEACHHISTORYINDEXSTART`) ?? 0;
+  }
+  catch(err)
+  {
+    return 0;
+  }
+}
+
+async function getEndPeachHistoryIndex()
+{
+  try
+  {
+    return await µBlock.localStorageGet(`PEACHHISTORYINDEXEND`) ?? 0;
+  }
+  catch(err)
+  {
+    return 0;
+  }
+}
+
+async function storePeachHistoryIndex(newEndAt, url)
+{
+  try
+  {
+    await µBlock.localStorageSet(`PEACHHISTORYINDEXEND`, newEndAt);
+    await µBlock.localStorageSet(`PEACHHISTORY${newEndAt}`, { url, at: Date.now()})
+  }
+  catch(err)
+  {
+    return 0;
+  }
+}
+
+async function storeUrl(url) {
+    let endAt = await getEndPeachHistoryIndex();
+    console.log(`storeUrl ${endAt}`);
+
+    let nextAt = endAt + 1;
+
+    await storePeachHistoryIndex(nextAt, url);
+
+    console.log(`storeUrl done nextAt=${nextAt} url=${url}`)
+}
+
 /******************************************************************************/
 /******************************************************************************/
 
@@ -873,7 +921,8 @@ vAPI.Tabs = class extends vAPI.Tabs {
     //   reason for this is that we need the effective URL and this information
     //   is not available at this point.
     onNavigation(details) {
-        console.log("vAPI.Tabs.onNavigation called details.url=", details.url);
+        storeUrl(details.url);
+
         super.onNavigation(details);
         const µb = µBlock;
         const { frameId, tabId, url } = details;
