@@ -31,12 +31,7 @@ async function storePeachHistoryIndex(endAt, url)
         return;
     }
     let endAt = await getEndPeachHistoryIndex();
-    console.log(`storeUrl ${endAt}`);
-
-    //let nextAt = endAt + 1;
 
     await storePeachHistoryIndex(endAt, url);
-
-    console.log(`storeUrl done endAt=${endAt} url=${url}`)
 }
 
