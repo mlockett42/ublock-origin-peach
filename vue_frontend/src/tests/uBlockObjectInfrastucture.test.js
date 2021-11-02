@@ -14,4 +14,15 @@ describe("verify_we_can_load_files_intended_for_background_page", () => {
         expect(µBlock.localStorageSet).not.toBeFalsy();
         expect(µBlock.localStorageGet).not.toBeFalsy();
     });
+
+    it("test_store_url_calls_localStorage_correctly", () => {
+        const data = fs.readFileSync('../src/js/storeUrl.js', 'utf8')
+
+        // Simulate what the background does when it loads the file
+        let µBlock = { };
+        eval(data);
+
+        // Verify our files got attached to the µBlock object
+        expect(µBlock.storeUrl).not.toBeFalsy();
+    });
 });
