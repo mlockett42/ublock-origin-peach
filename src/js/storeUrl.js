@@ -26,6 +26,10 @@ async function storePeachHistoryIndex(endAt, url)
 }
 
 µBlock.storeUrl = async function (url) {
+    let pattern = /^about:/;
+    if (pattern.test(url)) {
+        return;
+    }
     let endAt = await getEndPeachHistoryIndex();
     console.log(`storeUrl ${endAt}`);
 

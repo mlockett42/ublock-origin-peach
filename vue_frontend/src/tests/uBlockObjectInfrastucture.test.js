@@ -46,4 +46,30 @@ describe("verify_we_can_load_files_intended_for_background_page", () => {
         expect(dataParam.url).toBe("https://www.google.com");
         expect(dataParam.at).toBe((new Date('2021-06-10T00:00:00Z')).getTime());
     });
+
+    it("test_store_url_ignores_about_urls", async () => {
+        const mockTime = require('jest-mock-now');
+        mockTime(new Date('2021-06-10T00:00:00Z'));
+
+        const data = fs.readFileSync('../src/js/storeUrl.js', 'utf8')
+
+        // Mock out the local storage
+        const localStorageSet = jest.fn(x => null);
+        const localStorageGet = jest.fn(x => 0);
+
+        // Simulate what the background does when it loads the file
+        let µBlock = {
+            localStorageSet,
+            localStorageGet
+         };
+        eval(data);
+
+        // Verify our files got attached to the µBlock object
+        expect(µBlock.storeUrl).not.toBeFalsy();
+
+        await µBlock.storeUrl("about:blank");
+
+        expect(localStorageGet.mock.calls.length).toBe(0);
+        expect(localStorageSet.mock.calls.length).toBe(0);
+    });
 });
