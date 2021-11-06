@@ -16,8 +16,13 @@ async function storePeachHistoryIndex(endAt, url)
 {
   try
   {
+    let now = Date.now();
     await µBlock.localStorageSet(`PEACHHISTORYINDEXEND`, endAt + 1);
-    await µBlock.localStorageSet(`PEACHHISTORY${endAt}`, { url, at: Date.now()})
+    await µBlock.localStorageSet(`PEACHHISTORY${endAt}`, { url, at: now});
+
+    if (!await µBlock.localStorageGet("PEACHHISTORYEARLIESTUPDATE")) {
+      µBlock.localStorageSet("PEACHHISTORYEARLIESTUPDATE", now);
+    }
   }
   catch(err)
   {
@@ -35,3 +40,6 @@ async function storePeachHistoryIndex(endAt, url)
     await storePeachHistoryIndex(endAt, url);
 }
 
+µBlock.getEarliestRecordedat = async function() {
+  return await µBlock.localStorageGet("PEACHHISTORYEARLIESTUPDATE");
+}
