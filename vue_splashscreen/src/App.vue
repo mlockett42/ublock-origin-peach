@@ -3,59 +3,17 @@
     <v-main style="background-color: #f5e1d5"
       ><v-container class="pa-6" fluid>
         <v-row>
-          <v-col sm="6" md="4" lg="3">
-            <earnings />
-          </v-col>
-          <v-col sm="6" md="4" lg="3">
-            <sales />
-          </v-col>
-          <v-col sm="6" md="4" lg="3">
+          <v-col cols="4">
+            <period />
             <wallet />
-          </v-col>
-          <v-col sm="6" md="4" lg="3">
+            <earnings />
             <blocked-ads />
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col sm="6" md="4" lg="3">
-            <v-card rounded="xl" color="">
-              <v-img
-                src="./assets/images/advertisements/ad1.png"
-                height="calc(20.83vw - 25px - 6px)"
-                cover
-                style="border: solid 3px #d98150"
-              ></v-img>
-            </v-card>
+          <v-col cols="4">
+            <sales />
           </v-col>
-          <v-col sm="6" md="4" lg="3">
-            <v-card rounded="xl" color="">
-              <v-img
-                src="./assets/images/advertisements/ad2.png"
-                height="calc(20.83vw - 25px - 6px)"
-                cover
-                style="border: solid 3px #d98150"
-              ></v-img>
-            </v-card>
-          </v-col>
-          <v-col sm="6" md="4" lg="3">
-            <v-card rounded="xl" color="">
-              <v-img
-                src="./assets/images/advertisements/ad3.png"
-                height="calc(20.83vw - 25px - 6px)"
-                cover
-                style="border: solid 3px #d98150"
-              ></v-img>
-            </v-card>
-          </v-col>
-          <v-col sm="6" md="4" lg="3">
-            <v-card rounded="xl" color="">
-              <v-img
-                src="./assets/images/advertisements/ad4.png"
-                height="calc(20.83vw - 25px)"
-                cover
-                style="border: solid 3px #d98150"
-              ></v-img>
-            </v-card>
+          <v-col cols="4">
+            <history />
           </v-col>
         </v-row> </v-container
     ></v-main>
@@ -63,20 +21,26 @@
 </template>
 
 <script>
-import Earnings from "./components/Earnings.vue";
+// import Wallet from "./components/Wallet.vue";
+import Period from "./components/Period.vue";
 import Wallet from "./components/Wallet.vue";
-import Sales from "./components/Sales.vue";
+import Earnings from "./components/Earnings.vue";
 import BlockedAds from "./components/BlockedAds.vue";
+import Sales from "./components/Sales.vue";
+import History from "./components/History.vue";
 // import Advert from "./components/Advert.vue";
 
 export default {
   name: "App",
 
   components: {
-    Earnings,
+    // Income,
+    Period,
     Wallet,
     Sales,
     BlockedAds,
+    Earnings,
+    History,
     // Advert,
   },
 

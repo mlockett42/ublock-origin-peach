@@ -1,107 +1,60 @@
 <template>
-  <v-card
-    color="#d98150"
-    height="calc(100vh - 20.83vw - 72px + 25px)"
-    rounded="xl"
-    class="pa-4 gradient-bg"
-  >
-    <v-card-title class="pa-2"
-      ><h3>
-        <span
-          style="
-            color: white;
-            font-family: leaguespartan;
-            font-size: 1.8vw;
-            line-height: 1.8vw;
-          "
-          >trackers blocked</span
-        >
-      </h3></v-card-title
-    >
-    <v-row no-gutters align="center">
-      <v-col cols="12">
-        <v-chip-group mandatory>
-          <v-chip
-            v-for="tag in tags"
-            :key="tag"
-            style="align-self: right; font-family: More Sugar; font-weight: 400"
-            text-color="#d98150"
-          >
-            {{ tag }}
-          </v-chip>
-        </v-chip-group>
-      </v-col>
-    </v-row>
-    <!-- <v-virtual-scroll
-      v-if="files.length > 0"
-      v-bind:items="files"
-      height="144"
-      item-height="36"
-    >
-      <template v-slot:default="{ item }">
-        <v-container>
-          <v-row align="center">
-            <v-col cols="auto" class="pa-0">
-              <v-card-text class="pa-0">
-                <span
-                  style="
-                    font-family: Quicksand;
-                    font-weight: 400;
-                    color: dimgrey;
-                  "
-                  >{{ item.name }}
-                </span>
-              </v-card-text>
-            </v-col>
-            <v-spacer></v-spacer>
-            <v-col cols="auto" class="pa-0">
-              <v-btn
-                depressed
-                icon
-                color="dimgrey"
-                class="ml-4 rounded-lg darken-3--text no-active-btn"
-                v-on:click.stop="removeFile(item.name)"
+  <v-card color="#d98150" rounded="xl" class="pa-4 gradient-bg mt-6">
+    <v-container>
+      <v-row>
+        <v-col cols="auto" class="pa-0" align-self="center">
+          <v-card-title class="pa-2"
+            ><h2>
+              <div
+                style="
+                  color: white;
+                  font-family: leaguespartan;
+                  font-size: 1.8vw;
+                  line-height: 1.8vw;
+                "
               >
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
-      </template>
-    </v-virtual-scroll> -->
-    <v-virtual-scroll
-      v-bind:items="trackerData"
-      height="267"
-      item-height="48"
-      v-bind:bench="3"
+                trackers blocked
+              </div>
+            </h2></v-card-title
+          >
+        </v-col>
+        <v-spacer></v-spacer>
+        <v-col cols="auto" class="pa-0" align-self="center">
+          <v-btn flat icon color="white">
+            <v-icon>mdi-cog</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-row
+      v-for="item in trackerData"
+      v-bind:key="item.id"
+      no-gutters
+      align="center"
     >
-      <template v-slot:default="{ item }">
-        <v-row no-gutters align="center">
-          <v-col
-            cols="auto"
-            class="pa-2"
-            style="color: white; font-family: glacial"
-          >
-            <h3>
-              <span style="font-weight: 400">{{ item.company }}</span>
-            </h3>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto" class="pa-2"
-            ><v-chip
-              color="white"
-              style="
-                align-self: right;
-                font-family: More Sugar;
-                font-weight: 400;
-                color: #d98150;
-              "
-              >{{ item.count }}</v-chip
-            ></v-col
-          >
-        </v-row>
-      </template>
-    </v-virtual-scroll>
+      <v-col
+        cols="auto"
+        class="pa-2"
+        style="color: white; font-family: glacial"
+      >
+        <h3>
+          <span style="font-weight: 400">{{ item.company }}</span>
+        </h3>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col cols="auto" class="pa-2"
+        ><v-chip
+          color="white"
+          style="
+            align-self: right;
+            font-family: More Sugar;
+            font-weight: 400;
+            color: #d98150;
+          "
+          >{{ item.count }}</v-chip
+        ></v-col
+      >
+    </v-row>
   </v-card>
 </template>
 
@@ -113,12 +66,7 @@ export default {
       trackerData: [
         { id: 0, company: "Facebook", count: 1321 },
         { id: 1, company: "Google", count: 1227 },
-        { id: 2, company: "Yahoo", count: 821 },
-        { id: 3, company: "YouTube", count: 432 },
-        { id: 4, company: "Microsoft", count: 301 },
-        { id: 5, company: "HubSpot", count: 122 },
-        { id: 6, company: "HubSpot", count: 122 },
-        { id: 7, company: "HubSpot", count: 122 },
+        { id: 2, company: "Other", count: 821 },
       ],
     };
   },

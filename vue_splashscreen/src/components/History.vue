@@ -21,7 +21,7 @@
                   line-height: 1.8vw;
                 "
               >
-                sales
+                recent
               </div>
             </h2></v-card-title
           >
@@ -38,21 +38,11 @@
     <v-virtual-scroll
       v-bind:items="salesData"
       height="574"
-      item-height="64"
+      item-height="48"
       v-bind:bench="3"
     >
       <template v-slot:default="{ item }">
         <v-row no-gutters align="center">
-          <!-- <v-col cols="auto" class="pa-2">
-            <v-img
-              height="48px"
-              width="48px"
-              max-height="48px"
-              max-width="48px"
-              contain
-              v-bind:src="item.icon"
-            ></v-img>
-          </v-col> -->
           <v-col
             cols="auto"
             class="pa-2"
@@ -61,25 +51,9 @@
             <h3>
               <span style="font-weight: 400">{{ item.data }}</span>
             </h3>
-            <h5>
-              <v-icon color="#d98150" size="14px" style="margin-top: -3px"
-                >mdi-arrow-right-bold</v-icon
-              >
-              <span style="font-weight: 400">{{ item.to }}</span>
-            </h5>
           </v-col>
           <v-spacer></v-spacer>
           <v-col cols="auto" class="pa-2">
-            <v-chip
-              color="#f5e1d5"
-              style="
-                align-self: right;
-                font-family: More Sugar;
-                font-weight: 400;
-                color: #d98150;
-              "
-              >{{ item.value }}</v-chip
-            >
             <!-- <v-btn
               depressed
               icon
@@ -94,13 +68,16 @@
               ><v-icon color="#f5b18e">mdi-dots-vertical</v-icon></v-btn
             > -->
             <v-btn
+              v-if="item.mode == 0"
+              v-on:click="item.mode = 0"
               depressed
               dark
-              rounded
+              icon
               dense
               class="ml-2"
-              color="#f5e1d5"
+              color="#d98150"
               height="32px"
+              width="32px"
               style="
                 font-family: More Sugar;
                 font-size: 14px;
@@ -108,7 +85,107 @@
                 color: #d98150;
                 text-transform: capitalize;
               "
-              ><v-icon>mdi-dots-horizontal</v-icon>
+              ><v-icon>mdi-shield</v-icon>
+            </v-btn>
+            <v-btn
+              v-else
+              v-on:click="item.mode = 0"
+              depressed
+              dark
+              icon
+              dense
+              class="ml-2"
+              color="#f5e1d5"
+              height="32px"
+              width="32px"
+              style="
+                font-family: More Sugar;
+                font-size: 14px;
+                font-weight: 400;
+                color: #f5e1d5;
+                text-transform: capitalize;
+              "
+              ><v-icon>mdi-shield</v-icon>
+            </v-btn>
+            <v-btn
+              v-if="item.mode == 1"
+              v-on:click="item.mode = 1"
+              depressed
+              dark
+              icon
+              dense
+              class="ml-2"
+              color="#d98150"
+              height="32px"
+              width="32px"
+              style="
+                font-family: More Sugar;
+                font-size: 14px;
+                font-weight: 400;
+                color: #d98150;
+                text-transform: capitalize;
+              "
+              ><v-icon>mdi-safe-square</v-icon>
+            </v-btn>
+            <v-btn
+              v-else
+              v-on:click="item.mode = 1"
+              depressed
+              dark
+              icon
+              dense
+              class="ml-2"
+              color="#f5e1d5"
+              height="32px"
+              width="32px"
+              style="
+                font-family: More Sugar;
+                font-size: 14px;
+                font-weight: 400;
+                color: #f5e1d5;
+                text-transform: capitalize;
+              "
+              ><v-icon>mdi-safe-square</v-icon>
+            </v-btn>
+            <v-btn
+              v-if="item.mode == 2"
+              v-on:click="item.mode = 2"
+              depressed
+              dark
+              icon
+              dense
+              class="ml-2"
+              color="#d98150"
+              height="32px"
+              width="32px"
+              style="
+                font-family: More Sugar;
+                font-size: 14px;
+                font-weight: 400;
+                color: #d98150;
+                text-transform: capitalize;
+              "
+              ><v-icon>mdi-currency-usd</v-icon>
+            </v-btn>
+            <v-btn
+              v-else
+              v-on:click="item.mode = 2"
+              depressed
+              dark
+              icon
+              dense
+              class="ml-2"
+              color="#f5e1d5"
+              height="32px"
+              width="32px"
+              style="
+                font-family: More Sugar;
+                font-size: 14px;
+                font-weight: 400;
+                color: #f5e1d5;
+                text-transform: capitalize;
+              "
+              ><v-icon>mdi-currency-usd</v-icon>
             </v-btn>
           </v-col>
         </v-row>
@@ -124,73 +201,83 @@ export default {
       salesData: [
         {
           id: 0,
-          data: "Facebook Data",
+          data: "facebook.com",
           icon: require("../assets/images/facebook.png"),
           to: "CSIRO",
           value: "$53.21",
+          mode: 0,
         },
         {
           id: 1,
-          data: "YouTube Data",
+          data: "youtube.com",
           icon: require("../assets/images/youtube.png"),
           to: "Vimeo",
           value: "$3.21",
+          mode: 1,
         },
         {
           id: 2,
-          data: "ASOS Data",
+          data: "asos.com",
           icon: require("../assets/images/asos.png"),
           to: "Uniqlo",
           value: "$6.32",
+          mode: 0,
         },
         {
           id: 3,
-          data: "eBay Data",
+          data: "ebay.com.au",
           icon: require("../assets/images/ebay.png"),
           to: "Amazon",
           value: "$32.02",
+          mode: 0,
         },
         {
           id: 4,
-          data: "eBay Data",
+          data: "ebay.com.au",
           icon: require("../assets/images/ebay.png"),
           to: "Amazon",
           value: "$32.02",
+          mode: 0,
         },
         {
           id: 5,
-          data: "eBay Data",
+          data: "ebay.com.au",
           icon: require("../assets/images/ebay.png"),
           to: "Amazon",
           value: "$32.02",
+          mode: 2,
         },
         {
           id: 6,
-          data: "eBay Data",
+          data: "ebay.com.au",
           icon: require("../assets/images/ebay.png"),
           to: "Amazon",
           value: "$32.02",
+          mode: 2,
         },
         {
           id: 7,
-          data: "eBay Data",
+          data: "ebay.com.au",
           icon: require("../assets/images/ebay.png"),
           to: "Amazon",
           value: "$32.02",
+          mode: 1,
         },
         {
           id: 8,
-          data: "eBay Data",
+          data: "ebay.com.au",
           icon: require("../assets/images/ebay.png"),
           to: "Amazon",
           value: "$32.02",
+          mode: 2,
         },
         {
           id: 9,
-          data: "eBay Data",
+          data: "ebay.com.au",
           icon: require("../assets/images/ebay.png"),
           to: "Amazon",
           value: "$32.02",
+          mode: 0,
         },
       ],
     };

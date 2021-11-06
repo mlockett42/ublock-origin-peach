@@ -1,19 +1,37 @@
 <template>
-  <v-card color="#d98150" rounded="xl" class="pa-4 gradient-bg mt-6">
+  <v-card
+    color="#d98150"
+    height="calc(100vh - 20.83vw - 72px + 25px)"
+    rounded="xl"
+    class="pa-4 gradient-bg"
+  >
     <v-card-title class="pa-2"
       ><h2>
-        <div
+        <span
           style="
             color: white;
             font-family: leaguespartan;
             font-size: 1.8vw;
             line-height: 1.8vw;
           "
+          >earnings</span
         >
-          earnings
-        </div>
       </h2></v-card-title
     >
+    <v-row no-gutters align="center">
+      <v-col cols="12">
+        <v-chip-group mandatory>
+          <v-chip
+            v-for="period in periods"
+            :key="period"
+            style="align-self: right; font-family: More Sugar; font-weight: 400"
+            text-color="#d98150"
+          >
+            {{ period }}
+          </v-chip>
+        </v-chip-group>
+      </v-col>
+    </v-row>
     <v-row no-gutters align="center">
       <v-col
         cols="auto"
@@ -21,7 +39,7 @@
         style="color: white; font-family: glacial"
       >
         <h2>
-          <span style="color: white; font-family: glacial">$379.21</span>
+          <span style="color: white; font-family: glacial">$1,402.21</span>
         </h2>
       </v-col>
       <v-spacer></v-spacer>
@@ -30,32 +48,22 @@
           <v-icon color="white" size="18px" style="margin-top: -3px"
             >mdi-arrow-up-bold</v-icon
           >
-          <span style="font-weight: 400; color: white">$32.21 </span>
-          <span
-            style="
-              font-weight: 400;
-              color: white;
-              font-size: 12px;
-              text-transform: lowercase;
-            "
-            >compared to last {{ periods[periodSelected] }}</span
-          >
+          <span style="font-weight: 400; color: white">$1,402.21 </span>
         </h4></v-col
       >
     </v-row>
-    <!-- <graph /> -->
+    <graph />
   </v-card>
 </template>
 <script>
-// import Graph from "./Earnings/Graph.vue";
+import Graph from "./Earnings/Graph.vue";
 
 export default {
   components: {
-    // Graph,
+    Graph,
   },
   data() {
     return {
-      periodSelected: 0,
       periods: ["Year", "Month", "Week", "Day"],
     };
   },
