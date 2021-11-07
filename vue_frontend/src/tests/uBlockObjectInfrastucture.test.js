@@ -13,6 +13,7 @@ describe("verify_we_can_load_files_intended_for_background_page", () => {
         // Verify our files got attached to the µBlock object
         expect(µBlock.localStorageSet).not.toBeFalsy();
         expect(µBlock.localStorageGet).not.toBeFalsy();
+        expect(µBlock.localStorageRemove).not.toBeFalsy();
     });
 
     it("test_store_url_calls_localStorage_correctly", async () => {

@@ -16,7 +16,16 @@
         });    
 }
 
-// export default {
-//     localStorageSet,
-//     localStorageGet
-// }
+µBlock.localStorageRemove = function (key) {
+  let keys = null;
+  if (Array.isArray(key)) {
+    keys = key;
+  } else {
+    keys = [key];
+  }
+  return new Promise(function(resolve/*, reject*/) {
+      chrome.storage.local.remove(keys, function(result) {
+          resolve(keys);
+        });
+      });
+}

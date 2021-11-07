@@ -1,6 +1,6 @@
 'use strict';
 
-async function getEndPeachHistoryIndex()
+µBlock.getEndPeachHistoryIndex = async function()
 {
   try
   {
@@ -35,7 +35,7 @@ async function storePeachHistoryIndex(endAt, url)
     if (pattern.test(url)) {
         return;
     }
-    let endAt = await getEndPeachHistoryIndex();
+    let endAt = await µBlock.getEndPeachHistoryIndex();
 
     await storePeachHistoryIndex(endAt, url);
 }
