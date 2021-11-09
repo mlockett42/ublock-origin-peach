@@ -1,8 +1,13 @@
 <template>
-  <v-chip-group mandatory v-model="periodSelected" style="margin: 0px">
+  <v-chip-group
+    mandatory
+    v-model="selectedPeriod"
+    style="margin: 0px"
+    class="mb-4"
+  >
     <span v-for="period in periods" v-bind:key="period" style="margin: 0px">
       <v-chip
-        v-if="period == periods[periodSelected]"
+        v-if="period == periods[selectedPeriod]"
         style="
           align-self: right;
           font-family: More Sugar;
@@ -31,17 +36,26 @@
   </v-chip-group>
 </template>
 <script>
-// import Graph from "./Earnings/Graph.vue";
+import { mapActions } from "vuex";
 
 export default {
-  components: {
-    // Graph,
-  },
   data() {
     return {
-      periodSelected: 0,
       periods: ["Year", "Month", "Week", "Day"],
     };
+  },
+  computed: {
+    selectedPeriod: {
+      get() {
+        return this.$store.state.overview.selectedPeriod;
+      },
+      set(value) {
+        this.setSelectedPeriod(value);
+      },
+    },
+  },
+  methods: {
+    ...mapActions("overview", ["setSelectedPeriod"]),
   },
 };
 </script>

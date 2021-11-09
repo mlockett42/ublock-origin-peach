@@ -1,16 +1,16 @@
 <template>
-  <v-card color="#d98150" rounded="xl" class="pa-4 gradient-bg mt-6">
+  <v-card color="#d98150" rounded="xl" class="pa-4 pb-2 gradient-bg mb-6" flat>
     <v-card-title class="pa-2"
       ><h2>
         <div
           style="
             color: white;
             font-family: leaguespartan;
-            font-size: 1.8vw;
-            line-height: 1.8vw;
+            font-size: 24px;
+            line-height: 24px;
           "
         >
-          earnings
+          income
         </div>
       </h2></v-card-title
     >
@@ -21,7 +21,7 @@
         style="color: white; font-family: glacial"
       >
         <h2>
-          <span style="color: white; font-family: glacial">$379.21</span>
+          <span style="color: white; font-family: glacial">{{ earned }}</span>
         </h2>
       </v-col>
       <v-spacer></v-spacer>
@@ -30,7 +30,7 @@
           <v-icon color="white" size="18px" style="margin-top: -3px"
             >mdi-arrow-up-bold</v-icon
           >
-          <span style="font-weight: 400; color: white">$32.21 </span>
+          <span style="font-weight: 400; color: white">{{ change }} </span>
           <span
             style="
               font-weight: 400;
@@ -38,26 +38,29 @@
               font-size: 12px;
               text-transform: lowercase;
             "
-            >compared to last {{ periods[periodSelected] }}</span
+            >compared to {{ periodText }}</span
           >
         </h4></v-col
       >
     </v-row>
-    <!-- <graph /> -->
   </v-card>
 </template>
 <script>
-// import Graph from "./Earnings/Graph.vue";
+import { mapState, mapGetters } from "vuex";
 
 export default {
-  components: {
-    // Graph,
-  },
-  data() {
-    return {
-      periodSelected: 0,
-      periods: ["Year", "Month", "Week", "Day"],
-    };
+  computed: {
+    ...mapState({
+      period: (state) => state.overview.selectedPeriod,
+    }),
+    ...mapGetters("overview", {
+      earned: "periodEarned",
+      change: "periodChange",
+    }),
+    periodText() {
+      const options = ["last year", "last month", "last week", "yesterday"];
+      return options[this.period];
+    },
   },
 };
 </script>

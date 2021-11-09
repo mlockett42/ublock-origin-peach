@@ -1,52 +1,63 @@
 <template>
-  <v-app>
-    <v-main style="background-color: #f5e1d5"
-      ><v-container class="pa-6" fluid>
-        <v-row>
-          <v-col cols="4">
-            <period />
-            <wallet />
-            <earnings />
-            <blocked-ads />
-          </v-col>
-          <v-col cols="4">
-            <sales />
-          </v-col>
-          <v-col cols="4">
-            <history />
-          </v-col>
-        </v-row> </v-container
-    ></v-main>
+  <v-app id="inspire">
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      class="pa-4"
+      color="white"
+      mini-variant
+      mini-variant-width="72"
+      mobile-breakpoint="768"
+    >
+      <v-btn
+        v-on:click="page = 0"
+        v-bind:color="`${page === 0 ? 'white' : '#d98150'}`"
+        v-bind:style="{
+          backgroundColor: `${page === 0 ? '#d98150' : 'white'}`,
+        }"
+        depressed
+        icon
+        class="mb-4"
+      >
+        <v-icon>mdi-home</v-icon>
+      </v-btn>
+      <v-btn
+        v-on:click="page = 1"
+        v-bind:color="`${page === 1 ? 'white' : '#d98150'}`"
+        v-bind:style="{
+          backgroundColor: `${page === 1 ? '#d98150' : 'white'}`,
+        }"
+        depressed
+        icon
+        class="mb-4"
+      >
+        <v-icon>mdi-cog</v-icon>
+      </v-btn>
+    </v-navigation-drawer>
+
+    <v-main style="background-color: #f5e1d5">
+      <dashboard v-if="page == 0" />
+      <settings v-else />
+    </v-main>
   </v-app>
 </template>
 
 <script>
-// import Wallet from "./components/Wallet.vue";
-import Period from "./components/Period.vue";
-import Wallet from "./components/Wallet.vue";
-import Earnings from "./components/Earnings.vue";
-import BlockedAds from "./components/BlockedAds.vue";
-import Sales from "./components/Sales.vue";
-import History from "./components/History.vue";
-// import Advert from "./components/Advert.vue";
+import Dashboard from "./components/Dashboard.vue";
+import Settings from "./components/Settings.vue";
 
 export default {
   name: "App",
-
-  components: {
-    // Income,
-    Period,
-    Wallet,
-    Sales,
-    BlockedAds,
-    Earnings,
-    History,
-    // Advert,
+  data() {
+    return {
+      drawer: true,
+      page: 0,
+    };
   },
-
-  data: () => ({
-    //
-  }),
+  components: {
+    Dashboard,
+    Settings,
+  },
 };
 </script>
 
