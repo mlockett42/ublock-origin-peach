@@ -1,6 +1,5 @@
 'use strict';
 
-const exp = require('constants');
 const fs = require('fs')
 
 describe("verify_we_can_build_daily_summaries", () => {
