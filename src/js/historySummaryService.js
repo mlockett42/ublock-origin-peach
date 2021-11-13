@@ -46,7 +46,10 @@ async function setStartPeachHistoryIndex(index)
 }
 
 async function setUploadStartDate(d) {
-    await µBlock.localStorageSet("PEACHUPLOADSTARTDATE", d);
+    // Only update the start date if it has never been updated previously. Otherwise this value is updated by the actually uploader
+    if (!(await µBlock.localStorageGet("PEACHUPLOADSTARTDATE"))) {
+        await µBlock.localStorageSet("PEACHUPLOADSTARTDATE", d);
+    }
 }
 
 µBlock.processHistoryForUpload = async function() {
