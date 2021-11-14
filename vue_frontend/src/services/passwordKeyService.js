@@ -46,7 +46,10 @@ function GenerateNaclKeysFromHashedPassword(userName, password)
         reject(err);
         return;
       }
-      let result = {/*naclSigningKeyPair: keys.naclSigningKeyPairs[0],*/ naclSigningKeyPairBase64: keys.naclSigningKeyPairsBase64[0]};
+      let result = {
+        naclSigningKeyPairBase64: keys.naclSigningKeyPairsBase64[0],
+        naclEncryptionKeyPairBase64: keys.naclEncryptionKeyPairsBase64[0]
+      };
       resolve(result);
       //return result;
       // {
