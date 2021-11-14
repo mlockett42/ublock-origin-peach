@@ -2,7 +2,8 @@
 
 const fs = require('fs')
 
-describe("verify_we_can_build_daily_summaries", () => {
+describe("verify_we_can_import_modules", () => {
+  // In µBlock origin we need to do some gymnastics to import modules because it is not built with webpack
     it("test_import_the_scrypt_library_correctly_and_get_correct_results", async () => {
         const mockTime = require('jest-mock-now');
         mockTime(new Date('2021-06-10T01:00:00Z'));
