@@ -103,4 +103,33 @@ describe("verify_we_can_build_daily_summaries", () => {
 
         expect(generatedResult).toEqual(expectedResult);
     });
+
+
+    it("test_import_the_tweetnacl_util_library_correctly_and_get_correct_results", async () => {
+      const mockTime = require('jest-mock-now');
+      mockTime(new Date('2021-06-10T01:00:00Z'));
+
+      // Get the Nodejs tweetnacl.hash function and generate a hash
+      const nodejsTweetNacl = require('tweetnacl-util');
+      let expectedResult = nodejsTweetNacl.encodeUTF8(new Uint8Array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]));
+
+      const tweetNaclUtilData = fs.readFileSync('../src/js/dist/nacl-util.min.js', 'utf8');
+      eval(tweetNaclUtilData);
+      // Browserify helpful puts our function on module.exports for us
+      let tweetNaclUtil = module.exports;
+      module.exports = {};
+
+      // Inject the browserfied tweetnacl-util.js helper library
+      const tweetNaclUtilHelperData = fs.readFileSync('../src/js/tweetNaclUtilHelper.js', 'utf8')
+
+      let µBlock = { };
+      eval(tweetNaclUtilHelperData);
+      // Verify our files got attached to the µBlock object
+      expect(µBlock.tweetNaclUtil).not.toBeFalsy();
+
+      // Test the two versions of the functino produce the same output
+      let generatedResult = µBlock.tweetNaclUtil.encodeUTF8(new Uint8Array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]));
+
+      expect(generatedResult).toEqual(expectedResult);
+  });
 });
