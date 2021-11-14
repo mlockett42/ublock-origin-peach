@@ -86,8 +86,8 @@ describe("verify_we_can_build_daily_summaries", () => {
 
         const tweetNaclData = fs.readFileSync('../src/js/dist/nacl.min.js', 'utf8');
         eval(tweetNaclData);
-        // Browserify helpful puts our function on module.exports for us
-        let tweetNacl = module.exports;
+        // Browserify helpfully puts our function on module.exports for us
+        let nacl = module.exports;
         module.exports = {};
 
         // Inject the browserfied tweetnacl.js helper library
@@ -96,10 +96,10 @@ describe("verify_we_can_build_daily_summaries", () => {
         let µBlock = { };
         eval(tweetNaclHelperData);
         // Verify our files got attached to the µBlock object
-        expect(µBlock.tweetNacl).not.toBeFalsy();
+        expect(µBlock.nacl).not.toBeFalsy();
 
         // Test the two versions of the functino produce the same output
-        let generatedResult = µBlock.tweetNacl.hash(new Uint8Array([1,2,3,4]));
+        let generatedResult = µBlock.nacl.hash(new Uint8Array([1,2,3,4]));
 
         expect(generatedResult).toEqual(expectedResult);
     });
@@ -113,22 +113,33 @@ describe("verify_we_can_build_daily_summaries", () => {
       const nodejsTweetNacl = require('tweetnacl-util');
       let expectedResult = nodejsTweetNacl.encodeUTF8(new Uint8Array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]));
 
+      //Set up nacl as per instructions in the tweetnacl-util.js readme
+      const tweetNaclData = fs.readFileSync('../src/js/dist/nacl.min.js', 'utf8');
+      eval(tweetNaclData);
+      // Browserify helpfully puts our function on module.exports for us
+      let nacl = module.exports;
+      module.exports = {};
+
+      // Inject the browserfied tweetnacl.js helper library
+      const tweetNaclHelperData = fs.readFileSync('../src/js/tweetNaclHelper.js', 'utf8');
+      let µBlock = { };
+      eval(tweetNaclHelperData);
+
       const tweetNaclUtilData = fs.readFileSync('../src/js/dist/nacl-util.min.js', 'utf8');
       eval(tweetNaclUtilData);
       // Browserify helpful puts our function on module.exports for us
-      let tweetNaclUtil = module.exports;
+      nacl.util = module.exports;
       module.exports = {};
 
       // Inject the browserfied tweetnacl-util.js helper library
       const tweetNaclUtilHelperData = fs.readFileSync('../src/js/tweetNaclUtilHelper.js', 'utf8')
 
-      let µBlock = { };
       eval(tweetNaclUtilHelperData);
       // Verify our files got attached to the µBlock object
-      expect(µBlock.tweetNaclUtil).not.toBeFalsy();
+      expect(µBlock.nacl.util).not.toBeFalsy();
 
       // Test the two versions of the functino produce the same output
-      let generatedResult = µBlock.tweetNaclUtil.encodeUTF8(new Uint8Array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]));
+      let generatedResult = µBlock.nacl.util.encodeUTF8(new Uint8Array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]));
 
       expect(generatedResult).toEqual(expectedResult);
   });
