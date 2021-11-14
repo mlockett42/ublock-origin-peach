@@ -105,7 +105,6 @@ describe("verify_we_can_import_modules", () => {
         expect(generatedResult).toEqual(expectedResult);
     });
 
-
     it("test_import_the_tweetnacl_util_library_correctly_and_get_correct_results", async () => {
       const mockTime = require('jest-mock-now');
       mockTime(new Date('2021-06-10T01:00:00Z'));
@@ -144,4 +143,34 @@ describe("verify_we_can_import_modules", () => {
 
       expect(generatedResult).toEqual(expectedResult);
   });
+
+  it("test_import_the_axios_library_correctly_and_get_correct_results", async () => {
+    const mockTime = require('jest-mock-now');
+    mockTime(new Date('2021-06-10T01:00:00Z'));
+
+    // Get the Nodejs tweetnacl.hash function and generate a hash
+    const nodejsAxios = require('axios');
+
+    const axiosData = fs.readFileSync('../src/js/dist/axios.min.js', 'utf8');
+    eval(axiosData);
+    // Browserify helpfully puts our function on module.exports for us
+    let axios = module.exports;
+    module.exports = {};
+
+    // Inject the browserfied tweetnacl.js helper library
+    const axiosHelperData = fs.readFileSync('../src/js/axiosHelper.js', 'utf8')
+
+    let µBlock = { };
+    eval(axiosHelperData);
+    // Verify our files got attached to the µBlock object
+    expect(µBlock.axios).not.toBeFalsy();
+
+    let µBlockAxiosSet = new Set(Object.keys(µBlock.axios));
+    µBlockAxiosSet.delete("VERSION");
+
+    let nodejsAxiosSet = new Set(Object.keys(nodejsAxios));
+
+    // Axios functions do IO, so just check they are their
+    expect(µBlockAxiosSet).toEqual(nodejsAxiosSet);
+});
 });
