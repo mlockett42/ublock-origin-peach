@@ -112,7 +112,7 @@ describe("verify_we_can_import_modules", () => {
 
       // Get the Nodejs tweetnacl.hash function and generate a hash
       const nodejsTweetNacl = require('tweetnacl-util');
-      let expectedResult = nodejsTweetNacl.encodeUTF8(new Uint8Array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]));
+      let expectedResult = nodejsTweetNacl.encodeBase64(new Uint8Array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]));
 
       //Set up nacl as per instructions in the tweetnacl-util.js readme
       const tweetNaclData = fs.readFileSync('../src/js/dist/nacl.min.js', 'utf8');
@@ -140,7 +140,7 @@ describe("verify_we_can_import_modules", () => {
       expect(µBlock.nacl.util).not.toBeFalsy();
 
       // Test the two versions of the functino produce the same output
-      let generatedResult = µBlock.nacl.util.encodeUTF8(new Uint8Array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]));
+      let generatedResult = µBlock.nacl.util.encodeBase64(new Uint8Array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]));
 
       expect(generatedResult).toEqual(expectedResult);
   });
