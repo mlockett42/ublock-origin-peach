@@ -17,6 +17,13 @@ describe("verify_we_can_build_daily_summaries", () => {
     let peachKeys = nodejsTweetNacl.box.keyPair();
     let peachPublicKey = nodejsTweetNacl.util.encodeBase64(peachKeys.publicKey);
 
+    function mockAxiosGet(url) {
+        if (url.pathname === '/api/peachPublicKey') {
+            return {data: peachPublicKey};
+        }
+        throw `Unknown pathname = ${url}`;
+    }
+
     function initiseUploadEnvironment(mockLocalStorage, mockAxios) {
         const browsingHistoryUploadServiceData = fs.readFileSync('../src/js/browsingHistoryUploadService.js', 'utf8')
         const utcDateServiceData = fs.readFileSync('../src/js/utcDateService.js', 'utf8');
@@ -35,7 +42,7 @@ describe("verify_we_can_build_daily_summaries", () => {
 
         if (!mockAxios) {
             mockAxios = {
-                get: jest.fn(() => ({data: peachPublicKey})),
+                get: jest.fn(mockAxiosGet),
                 post: jest.fn()
             }
         }
@@ -163,7 +170,7 @@ describe("verify_we_can_build_daily_summaries", () => {
         };
 
         let mockAxios = {
-            get: jest.fn(() => ({data: peachPublicKey})),
+            get: jest.fn(mockAxiosGet),
             post: jest.fn()
         }
 
@@ -192,6 +199,7 @@ describe("verify_we_can_build_daily_summaries", () => {
             peachKeys.secretKey
         )
         let content1 = JSON.parse(nodejsTweetNacl.util.encodeUTF8(decryptedContent));
+
         expect(content1.length).toBe(mockLocalStorage["PEACHUPLOAD2021-06-08"].length);
         for(let i = 0; i < mockLocalStorage["PEACHUPLOAD2021-06-08"].length ; i++) {
             let content = content1[i];
@@ -239,7 +247,7 @@ describe("verify_we_can_build_daily_summaries", () => {
         let callCount = 0;
         let wasThrown = false;
         let mockAxios = {
-            get: jest.fn(() => ({data: peachPublicKey})),
+            get: jest.fn(mockAxiosGet),
             post: jest.fn(() => {
                 if (callCount > 0) {
                     wasThrown = true;
