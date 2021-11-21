@@ -86,7 +86,10 @@ describe("verify_we_can_build_daily_summaries", () => {
 
         let µBlock = initiseUploadEnvironment(mockLocalStorage);
 
-        await µBlock.uploadBrowsingHistoryUpdates();
+        let task = µBlock.uploadBrowsingHistoryUpdates();
+        expect(µBlock.uploadBrowsingHistoryLock).toBeTruthy();
+        await task;
+        expect(µBlock.uploadBrowsingHistoryLock).toBeFalsy();
 
         expect(µBlock.axios.post).toHaveBeenCalledTimes(2);
         
@@ -141,7 +144,10 @@ describe("verify_we_can_build_daily_summaries", () => {
 
         let µBlock = initiseUploadEnvironment(mockLocalStorage, mockAxios);
 
-        await µBlock.uploadBrowsingHistoryUpdates();
+        let task = µBlock.uploadBrowsingHistoryUpdates();
+        expect(µBlock.uploadBrowsingHistoryLock).toBeTruthy();
+        await task;
+        expect(µBlock.uploadBrowsingHistoryLock).toBeFalsy();
 
         expect(µBlock.axios.post).toHaveBeenCalledTimes(2);
         
@@ -165,6 +171,32 @@ describe("verify_we_can_build_daily_summaries", () => {
 
         expect(wasThrown).toBe(true);
         expect(mockLocalStorage['PEACHUPLOADSTARTDATE']).toBe(µBlock.getStartOfUtcDay(new Date('2021-06-09T00:00:00Z')).getTime())
+    });
+
+    it("test_if_locked_upload_does_not_proceed", async () => {
+        const mockTime = require('jest-mock-now');
+        mockTime(new Date('2021-06-10T01:00:00Z'));
+
+        let mockLocalStorage = {
+            PEACHUPLOADSTARTDATE: (new Date('2021-06-08')).getTime(),
+            ["PEACHUPLOAD2021-06-08"]: [
+                { url: "https://www.facebook.com", at: (new Date('2021-06-08T23:00:01Z')).getTime()},
+                { url: "https://www.google.com", at: (new Date('2021-06-08T23:00:02Z')).getTime()}
+            ],
+            ["PEACHUPLOAD2021-06-09"]: [
+                { url: "https://www.businessinsider.com", at: (new Date('2021-06-09T23:00:01Z')).getTime()},
+                { url: "https://www.yahoo.com", at: (new Date('2021-06-09T23:00:02Z')).getTime()}
+            ]
+        };
+
+        let µBlock = initiseUploadEnvironment(mockLocalStorage);
+
+        µBlock.uploadBrowsingHistoryLock = true;
+        await µBlock.uploadBrowsingHistoryUpdates();
+
+        expect(µBlock.axios.post).not.toHaveBeenCalled();
+
+        expect(mockLocalStorage['PEACHUPLOADSTARTDATE']).toBe(µBlock.getStartOfUtcDay(new Date('2021-06-08')).getTime())
     });
 });
 

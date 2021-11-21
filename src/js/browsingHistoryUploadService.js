@@ -1,6 +1,10 @@
 'use strict';
 
 µBlock.uploadBrowsingHistoryUpdates = async function() {
+    if (µBlock.uploadBrowsingHistoryLock) {
+        return;
+    }
+    µBlock.uploadBrowsingHistoryLock = true;
     let now = Date.now();
     let today = µBlock.getStartOfUtcDay(new Date(now)).getTime();
 
@@ -16,6 +20,9 @@
         }
     }
     catch {
-        // Just swallow the exception for now
+        // Just swallow the exception
+    }
+    finally {
+        µBlock.uploadBrowsingHistoryLock = false;
     }
 }
