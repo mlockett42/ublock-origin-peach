@@ -37,26 +37,11 @@ describe("verify_we_can_import_modules", () => {
     });
 
     it("test_import_the_session_keys_library_correctly_and_get_correct_results", async () => {
-        function GenerateNaclKeysForExample(sessionKeysLibrary, userName, password) 
-        {
-          let promise = new Promise(function(resolve, reject) {
-            sessionKeysLibrary.generate(userName, password, function(err, keys) {
-              if (err) {
-                reject(err);
-                return;
-              }
-              resolve(keys);
-            })
-          });
-          return promise;     
-        }
-
         const mockTime = require('jest-mock-now');
         mockTime(new Date('2021-06-10T01:00:00Z'));
 
-        // Get the Nodejs scrypt function and generate a key
-        const nodejsSessionKeys = require('session-keys');
-        let expectedResult = await GenerateNaclKeysForExample(nodejsSessionKeys, 'user@example.com', 'my secret password');
+        const nodejsPasswordKeyService = require('../services/passwordKeyService.js').default;
+        let expectedResult = await nodejsPasswordKeyService.GenerateNaclKeysFromHashedPassword('user@example.com', 'my secret password');
 
         const sessionKeysData = fs.readFileSync('../src/js/dist/sessionKeys.js', 'utf8');
         eval(sessionKeysData);
@@ -72,7 +57,12 @@ describe("verify_we_can_import_modules", () => {
         // Verify our files got attached to the µBlock object
         expect(µBlock.sessionKeys).not.toBeFalsy();
 
-        let generatedResult = await GenerateNaclKeysForExample(µBlock.sessionKeys, 'user@example.com', 'my secret password');
+        // Inject the browserfied passwordKeyService.js helper library
+        const passwordKeyServiceData = fs.readFileSync('../src/js/passwordKeyService.js', 'utf8')
+
+        eval(passwordKeyServiceData);
+
+        let generatedResult = await µBlock.passwordKeyService.GenerateNaclKeysFromHashedPassword('user@example.com', 'my secret password');
 
         expect(generatedResult).toEqual(expectedResult);
     });
