@@ -10,6 +10,8 @@ const fs = require('fs')
 import testCommon from './testCommon.js';
 let dictEquals = testCommon.dictEquals;
 
+const passwordKeyService = require('../services/passwordKeyService');
+
 describe("verify_we_can_build_daily_summaries", () => {
 
     let nodejsTweetNacl = require('tweetnacl');
@@ -191,6 +193,8 @@ describe("verify_we_can_build_daily_summaries", () => {
         expect(params[0][0].toString()).toBe('https://server.gopeach.app/api/fileUpload');
         expect(params[1][0].toString()).toBe('https://server.gopeach.app/api/fileUpload');
         let uploaded = params[0][1];
+        expect('signature' in uploaded).toBe(true);
+        expect('encryptedContent' in uploaded).toBe(true);
         expect(uploaded.senderPublicKey).toBe(senderPublicKeyBase64);
         let decryptedContent = nodejsTweetNacl.box.open(
             nodejsTweetNacl.util.decodeBase64(uploaded.encryptedContent),

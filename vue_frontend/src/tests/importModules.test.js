@@ -172,5 +172,77 @@ describe("verify_we_can_import_modules", () => {
 
     // Axios functions do IO, so just check they are their
     expect(µBlockAxiosSet).toEqual(nodejsAxiosSet);
-});
+  });
+
+  it("test_import_the_password_key_server_library_correctly_and_get_correct_results", async () => {
+    const nodejsPasswordKeyService = require('../services/passwordKeyService.js').default;
+
+    const mockTime = require('jest-mock-now');
+    mockTime(new Date('2021-06-10T01:00:00Z'));
+
+    // Get the Nodejs tweetnacl.hash function and generate a hash
+    const nodejsTweetNacl = require('tweetnacl-util');
+    let expectedResult = nodejsTweetNacl.encodeBase64(new Uint8Array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]));
+
+    //Set up nacl as per instructions in the tweetnacl-util.js readme
+    const tweetNaclData = fs.readFileSync('../src/js/dist/nacl.min.js', 'utf8');
+    eval(tweetNaclData);
+    // Browserify helpfully puts our function on module.exports for us
+    let nacl = module.exports;
+    module.exports = {};
+
+    // Inject the browserfied tweetnacl.js helper library
+    const tweetNaclHelperData = fs.readFileSync('../src/js/tweetNaclHelper.js', 'utf8');
+    let µBlock = { };
+    eval(tweetNaclHelperData);
+
+    const tweetNaclUtilData = fs.readFileSync('../src/js/dist/nacl-util.min.js', 'utf8');
+    eval(tweetNaclUtilData);
+    // Browserify helpful puts our function on module.exports for us
+    nacl.util = module.exports;
+    module.exports = {};
+
+    // Inject the browserfied tweetnacl-util.js helper library
+    const tweetNaclUtilHelperData = fs.readFileSync('../src/js/tweetNaclUtilHelper.js', 'utf8')
+
+    eval(tweetNaclUtilHelperData);
+    // Verify our files got attached to the µBlock object
+    expect(µBlock.nacl.util).not.toBeFalsy();
+
+    const sessionKeysData = fs.readFileSync('../src/js/dist/sessionKeys.js', 'utf8');
+    eval(sessionKeysData);
+    // Browserify helpful puts our function on module.exports for us
+    let sessionKeys = module.exports;
+    module.exports = {};
+
+    // Run the scryptPromise module and inject the browserfied scryptsy library
+    const sessionKeysHelperData = fs.readFileSync('../src/js/sessionKeysHelper.js', 'utf8')
+
+    eval(sessionKeysHelperData);
+
+    // Inject the browserfied tweetnacl-util.js helper library
+    const passwordKeyServiceData = fs.readFileSync('../src/js/passwordKeyService.js', 'utf8')
+
+    eval(passwordKeyServiceData);
+    // Verify our files got attached to the µBlock object
+    expect(µBlock.passwordKeyService).not.toBeFalsy();
+    expect(µBlock.passwordKeyService.SignString).not.toBeFalsy();
+    expect(µBlock.passwordKeyService.GenerateNaclKeysFromHashedPassword).not.toBeFalsy();
+
+    let userName = 'mark@deliveryengine.net';
+    let password = "password";
+
+    let hashedPassword = await nodejsPasswordKeyService.HashPassword(password);
+
+    let keys = await µBlock.passwordKeyService.GenerateNaclKeysFromHashedPassword(userName, hashedPassword);
+    let privateKey = keys.naclSigningKeyPairBase64.secretKey;
+    let publicKey = keys.naclSigningKeyPairBase64.publicKey;
+
+    let signature = µBlock.passwordKeyService.SignString("Hello world", privateKey);
+    let signedData = nodejsPasswordKeyService.VerifySignatureString(signature, publicKey);
+
+    signedData = signedData == null ? null : new TextDecoder("utf-8").decode(signedData);
+
+    expect(signedData).toBe("Hello world");
+  });
 });
