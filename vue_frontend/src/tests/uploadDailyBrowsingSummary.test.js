@@ -92,7 +92,12 @@ describe("verify_we_can_build_daily_summaries", () => {
  
          eval(sessionKeysHelperData);
 
-         // Return the µBlock object ready for the caller to use in it's tests
+        // Inject the browserfied tweetnacl-util.js helper library
+        const passwordKeyServiceData = fs.readFileSync('../src/js/passwordKeyService.js', 'utf8')
+
+        eval(passwordKeyServiceData);
+
+        // Return the µBlock object ready for the caller to use in it's tests
         return µBlock;
     };
 

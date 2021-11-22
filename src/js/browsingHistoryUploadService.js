@@ -45,18 +45,27 @@ return promise;
 
             let nonce = µBlock.nacl.randomBytes(24);
             let binaryData = µBlock.nacl.util.decodeUTF8(JSON.stringify(data));
-            let encryptedData = µBlock.nacl.box(
+            let encryptedContent = µBlock.nacl.util.encodeBase64(µBlock.nacl.box(
                 binaryData,
                 nonce,
                 peachPublicKey,
                 userSecretKey
-            );
+            ));
+
+            let userName = await µBlock.localStorageGet("PEACHUSERNAME");
+            let hashedPassword = await µBlock.localStorageGet("PEACHKEY");
+            let keys = await µBlock.passwordKeyService.GenerateNaclKeysFromHashedPassword(userName, hashedPassword);
+            let privateKey = keys.naclSigningKeyPairBase64.secretKey;
+            //let publicKey = keys.naclSigningKeyPairBase64.publicKey;
+        
+            let signature = µBlock.passwordKeyService.SignString(encryptedContent, privateKey);
 
             await µBlock.axios.post(new URL('/api/fileUpload', 'https://server.gopeach.app'), 
                 {
-                    encryptedContent: µBlock.nacl.util.encodeBase64(encryptedData),
+                    encryptedContent: encryptedContent,
                     senderPublicKey: keys.naclEncryptionKeyPairBase64.publicKey,
-                    nonce: µBlock.nacl.util.encodeBase64(nonce)
+                    nonce: µBlock.nacl.util.encodeBase64(nonce),
+                    signature: signature
                 });
             currentUploadDate += 24 * 60 * 60 * 1000; // Number of milliseconds in a day
             await µBlock.localStorageSet('PEACHUPLOADSTARTDATE', currentUploadDate);
