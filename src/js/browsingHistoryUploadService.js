@@ -25,7 +25,7 @@ return promise;
     }
     µBlock.uploadBrowsingHistoryLock = true;
 
-    let resp = await µBlock.axios.get(new URL('/api/peachPublicKey', 'https://server.gopeach.app'));
+    let resp = await µBlock.axios.get(new URL('/api/peachPublicKey', µBlock.peachConfig.serverUrl));
     let peachPublicKey = µBlock.nacl.util.decodeBase64(resp.data);
 
     let peachUserName = await µBlock.localStorageGet('PEACHUSERNAME');
@@ -43,7 +43,7 @@ return promise;
         while (currentUploadDate < today) {
             let data = await µBlock.localStorageGet(`PEACHUPLOAD${µBlock.formatUTCDate(new Date(currentUploadDate))}`);
 
-            resp = await µBlock.axios.get(new URL('/api/challengecode', 'https://server.gopeach.app'));
+            resp = await µBlock.axios.get(new URL('/api/challengecode', µBlock.peachConfig.serverUrl));
             let challengeCode = resp.data;
 
             let nonce = µBlock.nacl.randomBytes(24);
@@ -77,7 +77,7 @@ return promise;
                 signature
             }
 
-            await µBlock.axios.post(new URL('/api/fileUpload', 'https://server.gopeach.app'), payload);
+            await µBlock.axios.post(new URL('/api/fileUpload', µBlock.peachConfig.serverUrl), payload);
             currentUploadDate += 24 * 60 * 60 * 1000; // Number of milliseconds in a day
             await µBlock.localStorageSet('PEACHUPLOADSTARTDATE', currentUploadDate);
         }

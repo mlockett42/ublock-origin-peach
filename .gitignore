@@ -5,3 +5,4 @@
 node_modules
 
 /vue_frontend/src/config/config.js
+src/js/configHelper.js

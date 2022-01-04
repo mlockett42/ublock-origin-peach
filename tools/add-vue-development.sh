@@ -1,6 +1,7 @@
 echo "Set up development config"
 
 cp ./vue_frontend/src/config/config.development.js ./vue_frontend/src/config/config.js
+cp ./src/js/configHelper.development.js ./src/js/configHelper.js 
 
 echo "Build vuejs content"
 

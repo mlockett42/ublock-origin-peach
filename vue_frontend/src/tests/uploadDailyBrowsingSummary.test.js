@@ -100,6 +100,11 @@ describe("verify_we_can_build_daily_summaries", () => {
 
         eval(passwordKeyServiceData);
 
+        // Inject the config helper
+        const configHelperData = fs.readFileSync('../src/js/configHelper.js', 'utf8')
+
+        eval(configHelperData);
+
         // Return the µBlock object ready for the caller to use in it's tests
         return µBlock;
     };
@@ -159,7 +164,7 @@ describe("verify_we_can_build_daily_summaries", () => {
         expect(µBlock.axios.post).not.toHaveBeenCalled();
     });
 
-    it("test_we_upload_previous_file_which_are_waiting", async () => {
+    it("test_we_upload_previous_files_which_are_waiting", async () => {
         const mockTime = require('jest-mock-now');
         mockTime(new Date('2021-06-10T01:00:00Z'));
 
