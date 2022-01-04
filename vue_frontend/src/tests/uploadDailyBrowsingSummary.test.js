@@ -23,6 +23,9 @@ describe("verify_we_can_build_daily_summaries", () => {
         if (url.pathname === '/api/peachPublicKey') {
             return {data: peachPublicKey};
         }
+        if (url.pathname === '/api/challengecode') {
+            return {data: "8071a477-ee1b-4dba-8549-52c19bda46d0"};
+        }
         throw `Unknown pathname = ${url}`;
     }
 
@@ -188,9 +191,11 @@ describe("verify_we_can_build_daily_summaries", () => {
         await task;
         expect(µBlock.uploadBrowsingHistoryLock).toBeFalsy();
 
-        expect(µBlock.axios.get).toHaveBeenCalledTimes(1);
+        expect(µBlock.axios.get).toHaveBeenCalledTimes(3);
         let params = µBlock.axios.get.mock.calls;
         expect(params[0][0].toString()).toBe('https://server.gopeach.app/api/peachPublicKey');
+        expect(params[1][0].toString()).toBe('https://server.gopeach.app/api/challengecode');
+        expect(params[2][0].toString()).toBe('https://server.gopeach.app/api/challengecode');
         
         expect(µBlock.axios.post).toHaveBeenCalledTimes(2);
         params = µBlock.axios.post.mock.calls;
@@ -199,12 +204,13 @@ describe("verify_we_can_build_daily_summaries", () => {
         expect(params[1][0].toString()).toBe('https://server.gopeach.app/api/fileUpload');
         let uploaded = params[0][1];
         expect('signature' in uploaded).toBe(true);
-        expect('encryptedContent' in uploaded).toBe(true);
-        expect(uploaded.senderPublicKey).toBe(senderPublicKeyBase64);
+        expect('fileUploadCommand' in uploaded).toBe(true);
+        let fileUploadCommand = JSON.parse(new TextDecoder().decode(µBlock.nacl.util.decodeBase64(uploaded.fileUploadCommand)));
+        expect(fileUploadCommand.senderPublicKey).toBe(senderPublicKeyBase64);
         let decryptedContent = nodejsTweetNacl.box.open(
-            nodejsTweetNacl.util.decodeBase64(uploaded.encryptedContent),
-            nodejsTweetNacl.util.decodeBase64(uploaded.nonce),
-            nodejsTweetNacl.util.decodeBase64(uploaded.senderPublicKey),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.encryptedContent),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.nonce),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.senderPublicKey),
             peachKeys.secretKey
         )
         let content1 = JSON.parse(nodejsTweetNacl.util.encodeUTF8(decryptedContent));
@@ -216,11 +222,14 @@ describe("verify_we_can_build_daily_summaries", () => {
         }
 
         uploaded = params[1][1];
-        expect(uploaded.senderPublicKey).toBe(senderPublicKeyBase64);
+        expect('signature' in uploaded).toBe(true);
+        expect('fileUploadCommand' in uploaded).toBe(true);
+        fileUploadCommand = JSON.parse(new TextDecoder().decode(µBlock.nacl.util.decodeBase64(uploaded.fileUploadCommand)));
+        expect(fileUploadCommand.senderPublicKey).toBe(senderPublicKeyBase64);
         decryptedContent = nodejsTweetNacl.box.open(
-            nodejsTweetNacl.util.decodeBase64(uploaded.encryptedContent),
-            nodejsTweetNacl.util.decodeBase64(uploaded.nonce),
-            nodejsTweetNacl.util.decodeBase64(uploaded.senderPublicKey),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.encryptedContent),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.nonce),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.senderPublicKey),
             peachKeys.secretKey
         )
         let content2 = JSON.parse(nodejsTweetNacl.util.encodeUTF8(decryptedContent));
@@ -281,11 +290,14 @@ describe("verify_we_can_build_daily_summaries", () => {
         expect(params[1][0].toString()).toBe('https://server.gopeach.app/api/fileUpload');
 
         let uploaded = params[0][1];
-        expect(uploaded.senderPublicKey).toBe(senderPublicKeyBase64);
+        expect('signature' in uploaded).toBe(true);
+        expect('fileUploadCommand' in uploaded).toBe(true);
+        let fileUploadCommand = JSON.parse(new TextDecoder().decode(µBlock.nacl.util.decodeBase64(uploaded.fileUploadCommand)));
+        expect(fileUploadCommand.senderPublicKey).toBe(senderPublicKeyBase64);
         let decryptedContent = nodejsTweetNacl.box.open(
-            nodejsTweetNacl.util.decodeBase64(uploaded.encryptedContent),
-            nodejsTweetNacl.util.decodeBase64(uploaded.nonce),
-            nodejsTweetNacl.util.decodeBase64(uploaded.senderPublicKey),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.encryptedContent),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.nonce),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.senderPublicKey),
             peachKeys.secretKey
         )
         let content1 = JSON.parse(nodejsTweetNacl.util.encodeUTF8(decryptedContent));
@@ -296,11 +308,14 @@ describe("verify_we_can_build_daily_summaries", () => {
         }
 
         uploaded = params[1][1];
-        expect(uploaded.senderPublicKey).toBe(senderPublicKeyBase64);
+        expect('signature' in uploaded).toBe(true);
+        expect('fileUploadCommand' in uploaded).toBe(true);
+        fileUploadCommand = JSON.parse(new TextDecoder().decode(µBlock.nacl.util.decodeBase64(uploaded.fileUploadCommand)));
+        expect(fileUploadCommand.senderPublicKey).toBe(senderPublicKeyBase64);
         decryptedContent = nodejsTweetNacl.box.open(
-            nodejsTweetNacl.util.decodeBase64(uploaded.encryptedContent),
-            nodejsTweetNacl.util.decodeBase64(uploaded.nonce),
-            nodejsTweetNacl.util.decodeBase64(uploaded.senderPublicKey),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.encryptedContent),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.nonce),
+            nodejsTweetNacl.util.decodeBase64(fileUploadCommand.senderPublicKey),
             peachKeys.secretKey
         )
         let content2 = JSON.parse(nodejsTweetNacl.util.encodeUTF8(decryptedContent));

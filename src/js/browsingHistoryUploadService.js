@@ -1,6 +1,6 @@
 'use strict';
 
-function GenerateNaclKeysFromHashedPassword(userName, password) 
+function GenerateNaclKeysFromHashedPassword(userName, password)
 {
     const sessionKeys = µBlock.sessionKeys;
     let promise = new Promise(function(resolve, reject) {
@@ -16,7 +16,7 @@ function GenerateNaclKeysFromHashedPassword(userName, password)
         resolve(result);
     })
 });
-return promise;     
+return promise;
 }
 
 µBlock.uploadBrowsingHistoryUpdates = async function() {
@@ -43,6 +43,9 @@ return promise;
         while (currentUploadDate < today) {
             let data = await µBlock.localStorageGet(`PEACHUPLOAD${µBlock.formatUTCDate(new Date(currentUploadDate))}`);
 
+            resp = await µBlock.axios.get(new URL('/api/challengecode', 'https://server.gopeach.app'));
+            let challengeCode = resp.data;
+
             let nonce = µBlock.nacl.randomBytes(24);
             let binaryData = µBlock.nacl.util.decodeUTF8(JSON.stringify(data));
             let encryptedContent = µBlock.nacl.util.encodeBase64(µBlock.nacl.box(
@@ -55,18 +58,26 @@ return promise;
             let userName = await µBlock.localStorageGet("PEACHUSERNAME");
             let hashedPassword = await µBlock.localStorageGet("PEACHKEY");
             let keys = await µBlock.passwordKeyService.GenerateNaclKeysFromHashedPassword(userName, hashedPassword);
+            let senderPublicKey = keys.naclEncryptionKeyPairBase64.publicKey;
             let privateKey = keys.naclSigningKeyPairBase64.secretKey;
-            //let publicKey = keys.naclSigningKeyPairBase64.publicKey;
-        
-            let signature = µBlock.passwordKeyService.SignString(encryptedContent, privateKey);
 
-            await µBlock.axios.post(new URL('/api/fileUpload', 'https://server.gopeach.app'), 
-                {
-                    encryptedContent: encryptedContent,
-                    senderPublicKey: keys.naclEncryptionKeyPairBase64.publicKey,
-                    nonce: µBlock.nacl.util.encodeBase64(nonce),
-                    signature: signature
-                });
+            let fileUploadCommand = {
+                name: "mark@uwa.edu.au",
+                challengeCode: challengeCode,
+                senderPublicKey: senderPublicKey,
+                nonce: µBlock.nacl.util.encodeBase64(nonce),
+                encryptedContent: encryptedContent
+            };
+            let jsonCommand = JSON.stringify(fileUploadCommand);
+
+            let signature = µBlock.passwordKeyService.SignString(jsonCommand, privateKey);
+
+            let payload = {
+                fileUploadCommand: µBlock.nacl.util.encodeBase64(jsonCommand),
+                signature
+            }
+
+            await µBlock.axios.post(new URL('/api/fileUpload', 'https://server.gopeach.app'), payload);
             currentUploadDate += 24 * 60 * 60 * 1000; // Number of milliseconds in a day
             await µBlock.localStorageSet('PEACHUPLOADSTARTDATE', currentUploadDate);
         }
