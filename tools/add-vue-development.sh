@@ -21,3 +21,6 @@ cp ./vue_frontend/dist/css/popup.* ./dist/build/uBlock0.chromium/css -v
 echo "Copying Fonts"
 cp ./vue_frontend/dist/fonts/* ./dist/build/uBlock0.chromium/fonts -v
 
+echo "Copying Images"
+cp ./vue_frontend/dist/img/* ./dist/build/uBlock0.chromium/img -v
+

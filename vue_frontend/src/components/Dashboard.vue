@@ -13,12 +13,12 @@
             <v-row>
               <v-col cols="9" align-self="center">
                 <v-card-title v-if="pageState" class="primary--text pa-0"
-                  ><span style="font-family: moresugar"
+                  ><span style="font-family: More Sugar"
                     >peachblock is active</span
                   >
                 </v-card-title>
                 <v-card-title v-if="!pageState" class="secondary--text pa-0">
-                  <span style="font-family: moresugar"
+                  <span style="font-family: More Sugar"
                     >peachblock is disabled</span
                   >
                 </v-card-title>
@@ -73,7 +73,7 @@
                   style="box-shadow: 0px 0px 8px 0px #cccccc"
                 >
                   <!-- <v-card-text class="pb-0 primary--text"
-                    ><span style="font-family: moresugar"
+                    ><span style="font-family: More Sugar"
                       >June 6th</span
                     ></v-card-text
                   >
@@ -87,7 +87,7 @@
               </v-col>
             </v-row>
             <v-row v-if="tab == 2">
-              <settings/>
+              <settings />
             </v-row>
             <v-row v-if="tab == 3">
               <v-col class>
@@ -97,7 +97,7 @@
                   style="box-shadow: 0px 0px 8px 0px #cccccc"
                 >
                   <v-card-text class="pb-0 primary--text"
-                    ><span style="font-family: moresugar"
+                    ><span style="font-family: More Sugar"
                       >about us</span
                     ></v-card-text
                   >
@@ -268,13 +268,13 @@ export default {
       pageState: true,
       pageURL: null,
       netFilterEverToggled: false,
-      peachKey: "LOADING"
+      peachKey: "LOADING",
     };
   },
   computed: {
     pageStateColor: function () {
       return this.pageState ? "blue" : "gray";
-    }
+    },
   },
   methods: {
     toggleOnOff() {
