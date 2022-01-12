@@ -1,7 +1,7 @@
 'use strict';
 
 let config = {
-    serverUrl: "https://api.gopeach.app"
+    serverUrl: "https://accounts.gopeach.app"
 }
 
 export default config;
