@@ -1,7 +1,7 @@
 'use strict';
 
 import chromeLocalStorageService from '../services/chromeLocalStorageService';
-import config from '../config/config.js'
+import config from '../config/config.development.js' //change for deployment
 import passwordKeyService from '../services/passwordKeyService';
 import axios from 'axios';
 import nacl_util from 'tweetnacl-util';
