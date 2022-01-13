@@ -77,6 +77,11 @@ describe("verify_we_can_build_daily_summaries", () => {
          nacl.util = module.exports;
          module.exports = {};
    
+        // Inject the config helper
+        const configHelperData = fs.readFileSync('../src/js/configHelper.js', 'utf8')
+
+        eval(configHelperData);
+
          // Inject the browserfied tweetnacl-util.js helper library
          const tweetNaclUtilHelperData = fs.readFileSync('../src/js/tweetNaclUtilHelper.js', 'utf8')
    
@@ -99,11 +104,6 @@ describe("verify_we_can_build_daily_summaries", () => {
         const passwordKeyServiceData = fs.readFileSync('../src/js/passwordKeyService.js', 'utf8')
 
         eval(passwordKeyServiceData);
-
-        // Inject the config helper
-        const configHelperData = fs.readFileSync('../src/js/configHelper.js', 'utf8')
-
-        eval(configHelperData);
 
         // Return the µBlock object ready for the caller to use in it's tests
         return µBlock;

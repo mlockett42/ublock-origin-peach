@@ -1,5 +1,6 @@
 'use strict';
 
 µBlock.peachConfig = {
-    serverUrl: "http://localhost:3000"
+    serverUrl: "http://localhost:3000",
+    allowDebugFunctions: true
 }
