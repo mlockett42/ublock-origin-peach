@@ -83,7 +83,6 @@ chrome.extension.onConnect.addListener(function(port) {
         if (!(msg.from === "Peach")) {
             return;
         }
-        console.log("message recieved ", msg);
         if (msg.function === "toggleNetFiltering")
         {
             const tab = await vAPI.tabs.getCurrent();
@@ -136,11 +135,9 @@ chrome.extension.onConnect.addListener(function(port) {
                     pageCounts = pageStore.counts;
                     hostnameDetails = pageStore.getAllHostnameDetails();
                     netFilteringSwitch = pageStore.getNetFilteringSwitch();
-                    //console.log("hostnameDetails=", hostnameDetails);
                 }
             }
             let {touchedDomainCount, allDomainCount} = calculatePrivacyExposure(hostnameDetails);
-            console.log("netFilteringSwitch=", netFilteringSwitch);
 
             port.postMessage({uBlock: µBlock, info: {
                 pageHostname, 
