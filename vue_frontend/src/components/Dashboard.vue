@@ -8,142 +8,51 @@
   >
     <v-row>
       <v-col class="pa-0">
-        <v-card flat height="494px" class="rounded-0" color="#e6e0da">
-          <v-container fill-height d-flex align-content-start class="pa-6">
-            <v-row>
-              <v-col cols="9" align-self="center">
-                <v-card-title v-if="pageState" class="primary--text pa-0"
-                  ><span style="font-family: More Sugar"
-                    >peachblock is active</span
-                  >
-                </v-card-title>
-                <v-card-title v-if="!pageState" class="secondary--text pa-0">
-                  <span style="font-family: More Sugar"
-                    >peachblock is disabled</span
-                  >
-                </v-card-title>
-              </v-col>
-              <v-spacer></v-spacer>
-              <v-col cols="auto" align-self="center">
-                <v-btn
-                  fab
-                  small
-                  v-on:click="toggleOnOff()"
-                  style="box-shadow: 0px 0px 8px 0px #cccccc"
-                >
-                  <v-icon v-if="pageState" color="primary">mdi-pause</v-icon>
-                  <v-icon v-if="!pageState" color="secondary">mdi-play</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-            <v-row v-if="tab == 0">
-              <v-col class>
-                <v-card
-                  class="rounded-lg"
-                  color="primary--text"
-                  style="box-shadow: 0px 0px 8px 0px #cccccc"
-                >
-                  <v-card-title class="text-h6"> current page </v-card-title>
-                  <v-card-text
-                    >domain: {{ pageHostname }}<br />trackers blocked:
-                    {{ blockedOnThisPage }}</v-card-text
-                  >
-                </v-card>
-              </v-col>
-            </v-row>
-            <v-row v-if="tab == 0">
-              <v-col class>
-                <v-card
-                  class="rounded-lg"
-                  color="primary--text"
-                  style="box-shadow: 0px 0px 8px 0px #cccccc"
-                >
-                  <v-card-title class="text-h6"> all-time </v-card-title>
-                  <v-card-text
-                    >trackers blocked: {{ blockedRequestCount }}</v-card-text
-                  >
-                </v-card>
-              </v-col>
-            </v-row>
-            <v-row v-if="tab == 1">
-              <v-col class>
-                <v-card
-                  class="rounded-lg"
-                  color="primary--text"
-                  style="box-shadow: 0px 0px 8px 0px #cccccc"
-                >
-                  <!-- <v-card-text class="pb-0 primary--text"
-                    ><span style="font-family: More Sugar"
-                      >June 6th</span
-                    ></v-card-text
-                  >
-                  <v-card-title class="text-h6 pt-0">
-                    Are we logged in?
-                  </v-card-title>
-                  <v-card-text
-                    >Peach key = {{ peachKey }}</v-card-text
-                  > -->
-                </v-card>
-              </v-col>
-            </v-row>
-            <v-row v-if="tab == 2">
-              <settings />
-            </v-row>
-            <v-row v-if="tab == 3">
-              <v-col class>
-                <v-card
-                  class="rounded-lg"
-                  color="primary--text"
-                  style="box-shadow: 0px 0px 8px 0px #cccccc"
-                >
-                  <v-card-text class="pb-0 primary--text"
-                    ><span style="font-family: More Sugar"
-                      >about us</span
-                    ></v-card-text
-                  >
-                  <v-card-title class="text-h6 pt-0"> peach </v-card-title>
-                  <v-card-text>
-                    Peach is a company aiming to create a world in which
-                    internet users are given complete control over their own
-                    data.
-                  </v-card-text>
-                  <v-card-text>
-                    We're currently building a platform that allows users to
-                    earn passive income by selling their internet usage data.
-                    You'll be able to choose what data to sell, who you'd like
-                    to sell to, and at what price.
-                  </v-card-text>
-                  <!-- <v-card-actions class="pr-3 pb-3">
-										<v-spacer></v-spacer>
-										<v-btn depressed color="primary lighten-1 pl-5">
-											<span
-												style="font-family: glacial; font-size: 18px; text-transform: lowercase; margin-top: -5px;"
-												>more</span
-											>
-											<v-icon>mdi-chevron-right</v-icon>
-										</v-btn>
-									</v-card-actions> -->
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
+        <blocking
+          v-bind:pageState="pageState"
+          v-bind:pageHostname="pageHostname"
+          v-bind:blockedOnThisPage="blockedOnThisPage"
+          v-bind:blockedRequestCount="blockedRequestCount"
+          v-on:on="turnOnBlocking"
+          v-on:off="turnOffBlocking"
+          v-if="tab == 0"
+        />
+        <selling
+          v-bind:sellingState="sellingState"
+          v-on:on="turnOnSelling"
+          v-on:off="turnOffSelling"
+          v-else-if="tab == 1"
+        />
+        <account v-else-if="tab == 2" />
+        <help v-else-if="tab == 3" />
       </v-col>
     </v-row>
     <v-row>
       <v-col class="pa-0">
-        <v-bottom-navigation v-model="tab" color="primary">
+        <v-bottom-navigation v-model="tab" grow color="#d98150" height="72px">
           <v-btn>
-            <v-icon>mdi-home</v-icon>
+            <span style="font-family: Glacial Indifference; size: 13px"
+              >Blocking</span
+            >
+            <v-icon class="mb-1">mdi-shield</v-icon>
           </v-btn>
           <v-btn>
-            <v-icon>mdi-bell</v-icon>
+            <span style="font-family: Glacial Indifference; size: 13px"
+              >Selling</span
+            >
+            <v-icon class="mb-1">mdi-currency-usd</v-icon>
           </v-btn>
           <v-btn>
-            <v-icon>mdi-cog</v-icon>
+            <span style="font-family: Glacial Indifference; size: 13px"
+              >Account</span
+            >
+            <v-icon class="mb-1">mdi-account-circle</v-icon>
           </v-btn>
           <v-btn>
-            <v-icon>mdi-information</v-icon>
+            <span style="font-family: Glacial Indifference; size: 13px"
+              >Help</span
+            >
+            <v-icon class="mb-1">mdi-help-circle</v-icon>
           </v-btn>
         </v-bottom-navigation>
       </v-col>
@@ -218,12 +127,18 @@ function formatBlocked(blocked, total) {
   return text;
 }
 
-import Settings from "../components/Settings.vue";
+import Blocking from "./Dashboard/Blocking.vue";
+import Selling from "./Dashboard/Selling.vue";
+import Account from "./Dashboard/Account.vue";
+import Help from "./Dashboard/Help.vue";
 
 export default {
   name: "Dashboard",
   components: {
-    Settings,
+    Blocking,
+    Selling,
+    Account,
+    Help,
   },
   async mounted() {
     this.port = chrome.extension.connect({
@@ -266,6 +181,7 @@ export default {
       touchedDomainCount: "Loading",
       allDomainCount: "Loading",
       pageState: true,
+      sellingState: false,
       pageURL: null,
       netFilterEverToggled: false,
       peachKey: "LOADING",
@@ -290,6 +206,38 @@ export default {
         },
       });
       this.netFilterEverToggled = true;
+    },
+    turnOnBlocking() {
+      this.pageState = true;
+      this.port.postMessage({
+        from: "Peach",
+        function: "toggleNetFiltering",
+        params: {
+          url: this.pageURL,
+          scope: "",
+          state: true,
+        },
+      });
+      this.netFilterEverToggled = true;
+    },
+    turnOffBlocking() {
+      this.pageState = false;
+      this.port.postMessage({
+        from: "Peach",
+        function: "toggleNetFiltering",
+        params: {
+          url: this.pageURL,
+          scope: "",
+          state: false,
+        },
+      });
+      this.netFilterEverToggled = true;
+    },
+    turnOnSelling() {
+      this.sellingState = true;
+    },
+    turnOffSelling() {
+      this.sellingState = false;
     },
     calculatePrivacyExposure(hostnameDict) {
       let bg = chrome.extension.getBackgroundPage();
