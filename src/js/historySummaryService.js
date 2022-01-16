@@ -56,6 +56,9 @@ async function setUploadStartDate(d) {
     µBlock.processHistoryForUploadLock = true;
     try {
         let startAt = await getStartPeachHistoryIndex();
+        if (startAt == 0) {
+            startAt = 1;
+        }
         let endAt = await µBlock.getEndPeachHistoryIndex();
         let records = [];
         let recordsByDay = [];
@@ -66,7 +69,10 @@ async function setUploadStartDate(d) {
         let newStartAt = null;
         let historyToDelete = [];
         // Loop over every record and load it into a daily batch
+        console.log("processHistoryForUpload startAt=", startAt);
+        console.log("processHistoryForUpload endAt=", endAt);
         for (i = startAt; i < endAt && recordInPast ; i++) {
+            console.log("processHistoryForUpload i=", i);
             let record = await µBlock.localStorageGet(`PEACHHISTORY${i}`);
             if (record.at !== lastDay && lastDay !== null) {
                 recordsByDay.push(records);

@@ -121,6 +121,8 @@ if (µBlock.peachConfig.allowDebugFunctions) {
     let today = µBlock.getStartOfUtcDay(new Date(now)).getTime();
 
     let peachStartDate = await µBlock.localStorageGet('PEACHUPLOADSTARTDATE');
+    console.log("peachStartDate=", peachStartDate);
+    console.log("today=", today);
     let currentUploadDate = peachStartDate;
 
     try {
@@ -155,6 +157,8 @@ if (µBlock.peachConfig.allowDebugFunctions) {
             let jsonCommand = JSON.stringify(fileUploadCommand);
 
             let signature = µBlock.passwordKeyService.SignString(jsonCommand, privateKey);
+
+            jsonCommand = (new TextEncoder()).encode(jsonCommand);
 
             let payload = {
                 fileUploadCommand: µBlock.nacl.util.encodeBase64(jsonCommand),
