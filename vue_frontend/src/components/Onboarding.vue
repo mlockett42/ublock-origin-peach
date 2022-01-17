@@ -12,16 +12,17 @@
       <v-col>
         <register v-on:toLogin="selectedOption = 0" v-if="registerSelected" />
         <login v-on:toRegister="selectedOption = 1" v-else-if="loginSelected" />
-        <loading v-else />
+        <verification v-else-if="verificationSelected" />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import Register from "../components/Register.vue";
-import Login from "../components/Login.vue";
-import Loading from "../components/Loading.vue";
+import Register from "./Onboarding/Register.vue";
+import Login from "./Onboarding/Login.vue";
+import Verification from "./Onboarding/Verification.vue";
+
 import loginService from "../services/loginService";
 
 export default {
@@ -29,14 +30,17 @@ export default {
   components: {
     Register,
     Login,
-    Loading,
+    Verification,
   },
   data() {
     return {
-      selectedOption: null,
+      selectedOption: 1,
     };
   },
   computed: {
+    verificationSelected: function () {
+      return this.selectedOption == 2;
+    },
     registerSelected: function () {
       return this.selectedOption == 1;
     },

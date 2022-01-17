@@ -1,25 +1,35 @@
 <template>
   <v-card flat class="rounded-0" color="#fbf2e4" height="478">
     <v-container align-content-space-between d-flex fill-height fluid>
-      <v-row justify="center">
-        <v-col cols="auto" class="pa-0">
-          <v-img
-            src="../assets/img/default_image.png"
-            width="75px"
-            height="auto"
-            class="mb-3"
-          ></v-img>
-          <div
-            style="
-              font-family: More Sugar;
-              color: #d98150;
-              font-size: 28px;
-              line-height: 28px;
-              text-align: center;
-            "
-          >
-            Login
-          </div>
+      <v-row>
+        <v-col class="pa-0">
+          <v-container>
+            <v-row justify="center">
+              <v-col cols="auto" class="pa-0 mb-1">
+                <v-img
+                  src="../../assets/img/default_image.png"
+                  width="75px"
+                  height="auto"
+                  class="mb-3"
+                ></v-img>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col class="pa-0">
+                <div
+                  style="
+                    font-family: More Sugar;
+                    color: #d98150;
+                    font-size: 28px;
+                    line-height: 28px;
+                    text-align: center;
+                  "
+                >
+                  Log in
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-col>
       </v-row>
       <v-row>
@@ -146,9 +156,7 @@
               "
             >
               Don't have an account?
-              <span
-                style="color: #d98150; cursor: pointer"
-                v-on:click="toRegister"
+              <span style="color: #d98150" v-on:click="toRegister"
                 >Sign up</span
               >
             </div>
@@ -160,7 +168,7 @@
 </template>
 
 <script>
-import loginService from "../services/loginService";
+import loginService from "../../services/loginService";
 
 export default {
   name: "Login",
