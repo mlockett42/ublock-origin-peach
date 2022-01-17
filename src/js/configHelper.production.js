@@ -2,5 +2,6 @@
 
 µBlock.peachConfig = {
     serverUrl: "https://server.gopeach.app/",
-    allowDebugFunctions: false
+    allowDebugFunctions: false,
+    runRegularUploads: true
 }

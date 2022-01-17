@@ -2,5 +2,6 @@
 
 µBlock.peachConfig = {
     serverUrl: "http://localhost:3000",
-    allowDebugFunctions: true
+    allowDebugFunctions: true,
+    runRegularUploads: false
 }
