@@ -1,8 +1,8 @@
 <template>
   <v-app id="app">
     <loading v-if="loading" />
-    <dashboard v-else-if="!isLoggedInCorrectly" />
-    <onboarding v-else-if="isLoggedInCorrectly" />
+    <dashboard v-else-if="isLoggedInCorrectly" />
+    <onboarding v-else-if="!isLoggedInCorrectly" />
   </v-app>
 </template>
 
