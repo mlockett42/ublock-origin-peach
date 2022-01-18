@@ -21,9 +21,14 @@ export default {
     Allowed,
   },
   computed: {
-    ...mapState({
-      status: (state) => state.selling.status,
-    }),
+    async status() {
+      let bg = chrome.extension.getBackgroundPage();
+      bg.console.log("status this.$store=", this.$store);
+      return this.$store.state.selling.status
+    }
+    // ...mapState({
+    //   status: (state) => state.selling.status,
+    // }),
   },
 };
 </script>
