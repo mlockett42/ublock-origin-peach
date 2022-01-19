@@ -12,10 +12,10 @@ describe("verify_we_can_build_daily_summaries", () => {
 
         let mockLocalStorage = {
             PEACHHISTORYINDEXSTART: 0,
-            PEACHHISTORY0: { url: "https://www.facebook.com", at: (new Date('2021-06-09T23:00:01Z')).getTime()},
-            PEACHHISTORY1: { url: "https://www.google.com", at: (new Date('2021-06-09T23:00:02Z')).getTime()},
-            PEACHHISTORY2: { url: "https://www.businessinsider.com", at: (new Date('2021-06-10T00:00:01Z')).getTime()},
-            PEACHHISTORYINDEXEND: 3,
+            PEACHHISTORY1: { url: "https://www.facebook.com", at: (new Date('2021-06-09T23:00:01Z')).getTime()},
+            PEACHHISTORY2: { url: "https://www.google.com", at: (new Date('2021-06-09T23:00:02Z')).getTime()},
+            PEACHHISTORY3: { url: "https://www.businessinsider.com", at: (new Date('2021-06-10T00:00:01Z')).getTime()},
+            PEACHHISTORYINDEXEND: 4,
             PEACHHISTORYEARLIESTUPDATE: new Date('2021-06-09T23:00:01Z')
         };
         // Mock out the local storage
@@ -45,7 +45,7 @@ describe("verify_we_can_build_daily_summaries", () => {
         expect(µBlock.processHistoryForUploadLock).toBeFalsy();
 
         // Test data moved out of the short term storage
-        expect(mockLocalStorage['PEACHHISTORYINDEXSTART']).toBe(2);
+        expect(mockLocalStorage['PEACHHISTORYINDEXSTART']).toBe(3);
         expect('PEACHHISTORY0' in mockLocalStorage).toBe(false);
         expect('PEACHHISTORY1' in mockLocalStorage).toBe(false);
 

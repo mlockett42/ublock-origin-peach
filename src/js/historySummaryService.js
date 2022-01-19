@@ -1,24 +1,5 @@
 'use strict';
 
-// function delay(time) {
-//     return new Promise((resolve) => {
-//         setTimeout(() => resolve(), time);
-//     });
-// }
-
-// function getStartOfDayByDate(date) {
-//     return (new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0)).getTime();
-// }
-
-// function getStartOfDay() {
-//     // Date.now() needed for jest-mock-time to work in unit tests
-//     let d = new Date(Date.now());
-//     console.log("getStartOfDay d=", d);
-//     console.log("getStartOfDay typeof d=", typeof d);
-//     console.log("getStartOfDay d.getFullYear()=", d.getFullYear());
-//     return getStartOfDayByDate(new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getHours(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds())));
-// }
-
 function getStartOfDayByDate(epoch) {
     return epoch - (epoch % (86400 * 1000));
 }
@@ -41,7 +22,6 @@ async function getStartPeachHistoryIndex()
 
 async function setStartPeachHistoryIndex(index)
 {
-    //console.log("setStartPeachHistoryIndex index=", index);
     await µBlock.localStorageSet("PEACHHISTORYINDEXSTART", index);
 }
 
@@ -56,6 +36,9 @@ async function setUploadStartDate(d) {
     µBlock.processHistoryForUploadLock = true;
     try {
         let startAt = await getStartPeachHistoryIndex();
+        if (startAt == 0) {
+            startAt = 1;
+        }
         let endAt = await µBlock.getEndPeachHistoryIndex();
         let records = [];
         let recordsByDay = [];

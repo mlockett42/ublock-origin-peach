@@ -120,7 +120,7 @@ export default {
       showPassword1: false,
       showPassword2: false,
       error: "",
-      email: "james@audcent.com",
+      email: "you@example.com",
     };
   },
 };
