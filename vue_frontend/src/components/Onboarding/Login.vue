@@ -156,9 +156,12 @@
               "
             >
               Don't have an account?
-              <span style="color: #d98150" v-on:click="toRegister"
-                >Sign up</span
+              <a
+                v-on:click="toRegister"
+                style="color: #d98150; text-decoration: none"
               >
+                Sign up
+              </a>
             </div>
           </v-card-text>
         </v-col>

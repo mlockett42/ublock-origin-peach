@@ -135,7 +135,6 @@ export default {
   name: "Account",
   methods: {
     async logout() {
-      console.log("logout clicked");
       await loginService.logout(this.$store);
     },
   },
