@@ -121,7 +121,6 @@ export default {
   props: {
     sellingState: Boolean,
   },
-  data() {},
 };
 </script>
 
