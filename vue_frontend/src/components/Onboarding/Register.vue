@@ -175,7 +175,12 @@
               "
             >
               Already have an account?
-              <span v-on:click="toLogin" style="color: #d98150">Log in</span>
+              <a
+                v-on:click="toLogin"
+                style="color: #d98150; text-decoration: none"
+              >
+                Log in
+              </a>
             </div>
           </v-card-text>
         </v-col>

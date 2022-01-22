@@ -111,7 +111,7 @@
                             font-weight: 400;
                             color: #d98150;
                           "
-                          >{{ pageHostname }}</v-chip
+                          >{{ shortenHostname(pageHostname) }}</v-chip
                         >
                       </v-col>
                     </v-row>
@@ -185,6 +185,11 @@ export default {
     pageHostname: String,
     blockedOnThisPage: Number,
     blockedRequestCount: Number,
+  },
+  methods: {
+    shortenHostname(str) {
+      return str.length > 16 ? str.substr(0, 16) + "..." : str;
+    },
   },
 };
 </script>
