@@ -210,12 +210,8 @@ export default {
       this.signingUp = true;
       if (this.password1 !== this.password2) {
         this.error = "The passwords must match.";
-        return;
-      }
-      let pattern =
-        /^.*@((.*.\.uwa\.edu\.au)|uwa\.edu\.au)$|^.*@deliveryengine.net$/;
-      if (this.userName.match(pattern) == null) {
-        this.error = "Invalid email address.";
+        alert(this.error);
+        this.signingUp = false;
         return;
       }
       await loginService.createUser(this.userName, this.password1);
