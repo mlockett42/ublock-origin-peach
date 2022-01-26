@@ -1,7 +1,7 @@
 'use strict';
 
 µBlock.peachConfig = {
-    serverUrl: "https://server.gopeach.app/",
+    serverUrl: "https://accounts.gopeach.app/",
     allowDebugFunctions: false,
     runRegularUploads: true
 }
