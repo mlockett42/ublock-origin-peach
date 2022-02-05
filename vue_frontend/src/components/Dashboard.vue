@@ -131,6 +131,7 @@ import Blocking from "./Dashboard/Blocking.vue";
 import Selling from "./Dashboard/Selling.vue";
 import Account from "./Dashboard/Account.vue";
 import Help from "./Dashboard/Help.vue";
+import sellingStateService from "../services/sellingStateService"
 
 export default {
   name: "Dashboard",
@@ -168,6 +169,7 @@ export default {
       self.pageState = msg.info.netFilteringSwitch;
       self.pageURL = msg.info.pageURL;
     });
+    this.sellingState = await sellingStateService.getSellingState();
   },
   data() {
     return {
@@ -233,11 +235,13 @@ export default {
       });
       this.netFilterEverToggled = true;
     },
-    turnOnSelling() {
+    async turnOnSelling() {
       this.sellingState = true;
+      await sellingStateService.setSellingState(this.sellingState);
     },
-    turnOffSelling() {
+    async turnOffSelling() {
       this.sellingState = false;
+      await sellingStateService.setSellingState(this.sellingState);
     },
     calculatePrivacyExposure(hostnameDict) {
       let bg = chrome.extension.getBackgroundPage();

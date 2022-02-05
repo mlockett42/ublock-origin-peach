@@ -191,7 +191,7 @@
                 </div>
                 <v-card
                   flat
-                  class="rounded-lg pa-0"
+                  class="rounded-lg pa-0 mb-3"
                   color="primary--text"
                   style="box-shadow: 0px 0px 8px 0px #cccccc"
                 >
@@ -258,6 +258,65 @@
                                   "
                                 >
                                   Follow us on instagram
+                                </div>
+                              </v-col>
+                              <v-spacer></v-spacer>
+                              <v-col
+                                cols="auto"
+                                class="pa-0"
+                                align-self="center"
+                              >
+                                <v-icon color="#d98150"
+                                  >mdi-chevron-right</v-icon
+                                >
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card>
+                <div
+                  class="mb-1 ml-2"
+                  style="
+                    font-family: More Sugar;
+                    color: #d98150;
+                    font-size: 16px;
+                  "
+                >
+                  Licence compliance
+                </div>
+                <v-card
+                  flat
+                  class="rounded-lg pa-0"
+                  color="primary--text"
+                  style="box-shadow: 0px 0px 8px 0px #cccccc"
+                >
+                  <v-container>
+                    <v-row>
+                      <v-col class="pa-0">
+                        <v-card
+                          flat
+                          class="pa-3 py-2 rounded-lg"
+                          href="https://github.com/mlockett42/ublock-origin-peach"
+                          target="_blank"
+                        >
+                          <v-container>
+                            <v-row>
+                              <v-col
+                                cols="auto"
+                                class="pa-1"
+                                align-self="center"
+                              >
+                                <div
+                                  style="
+                                    font-family: Glacial Indifference;
+                                    font-size: 16px;
+                                    color: #d98150;
+                                  "
+                                >
+                                  Peach is Open Source
                                 </div>
                               </v-col>
                               <v-spacer></v-spacer>

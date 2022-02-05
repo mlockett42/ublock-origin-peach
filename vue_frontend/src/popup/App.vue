@@ -53,11 +53,11 @@ export default {
 }
 html {
   width: 350px;
-  height: 550px;
+  height: 600px;
 }
 #app {
   position: relative;
   width: 350px;
-  height: 550px;
+  height: 600px;
 }
 </style>

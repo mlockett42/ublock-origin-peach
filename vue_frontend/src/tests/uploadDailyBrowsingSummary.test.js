@@ -1,10 +1,5 @@
 'use strict';
 
-// import axios from "axios";
-//import browsingHistoryUploadService from '../services/browsingHistoryUploadService.js'
-
-// jest.mock("axios");
-
 const fs = require('fs')
 
 import testCommon from './testCommon.js';
@@ -29,7 +24,7 @@ describe("verify_we_can_build_daily_summaries", () => {
         throw `Unknown pathname = ${url}`;
     }
 
-    function initiseUploadEnvironment(mockLocalStorage, mockAxios) {
+    function initiseUploadEnvironment(mockLocalStorage, mockAxios, mockPeachConfig) {
         const browsingHistoryUploadServiceData = fs.readFileSync('../src/js/browsingHistoryUploadService.js', 'utf8')
         const utcDateServiceData = fs.readFileSync('../src/js/utcDateService.js', 'utf8');
 
@@ -57,7 +52,8 @@ describe("verify_we_can_build_daily_summaries", () => {
             localStorageSet,
             localStorageGet,
             localStorageRemove,
-            axios: mockAxios
+            axios: mockAxios,
+            peachConfig: mockPeachConfig
          };
          
          const tweetNaclData = fs.readFileSync('../src/js/dist/nacl.min.js', 'utf8');
@@ -104,6 +100,22 @@ describe("verify_we_can_build_daily_summaries", () => {
         const passwordKeyServiceData = fs.readFileSync('../src/js/passwordKeyService.js', 'utf8')
 
         eval(passwordKeyServiceData);
+
+        // Mock out chrome alarms
+        let chrome = {
+                alarms:
+                    {
+                        create: jest.fn(),
+                        onAlarm: {
+                            addListener: jest.fn()
+                        }
+                    },
+            }
+
+        // Load the schedule
+        const scheduleBrowserUploadsData = fs.readFileSync('../src/js/scheduleBrowserUploads.js', 'utf8')
+
+        eval(scheduleBrowserUploadsData);
 
         // Return the µBlock object ready for the caller to use in it's tests
         return µBlock;
@@ -359,5 +371,34 @@ describe("verify_we_can_build_daily_summaries", () => {
 
         expect(mockLocalStorage['PEACHUPLOADSTARTDATE']).toBe(µBlock.getStartOfUtcDay(new Date('2021-06-08')).getTime())
     });
+
+    it("test_if_sell_my_data_is_off_we_do_not_proceed", async () => {
+        let µBlock = initiseUploadEnvironment({PEACHSELLINGSTATE: false}, null, {runRegularUploads: true});
+
+        µBlock.processHistoryForUpload = jest.fn();
+        µBlock.uploadBrowsingHistoryUpdates = jest.fn();
+
+        expect(µBlock.checkAndUploadBrowserHistory).toBeTruthy();
+
+        await µBlock.checkAndUploadBrowserHistory({name: "check_for_upload"});
+
+        expect(µBlock.processHistoryForUpload).not.toHaveBeenCalled();
+        expect(µBlock.uploadBrowsingHistoryUpdates).not.toHaveBeenCalled();
+    });
+
+    it("test_if_sell_my_data_is_on_we_do_proceed", async () => {
+        let µBlock = initiseUploadEnvironment({PEACHSELLINGSTATE: true}, null, {runRegularUploads: true});
+
+        µBlock.processHistoryForUpload = jest.fn();
+        µBlock.uploadBrowsingHistoryUpdates = jest.fn();
+
+        expect(µBlock.checkAndUploadBrowserHistory).toBeTruthy();
+
+        await µBlock.checkAndUploadBrowserHistory({name: "check_for_upload"});
+
+        expect(µBlock.processHistoryForUpload).toHaveBeenCalled();
+        expect(µBlock.uploadBrowsingHistoryUpdates).toHaveBeenCalled();
+    });
+
 });
 
