@@ -131,7 +131,7 @@ import Blocking from "./Dashboard/Blocking.vue";
 import Selling from "./Dashboard/Selling.vue";
 import Account from "./Dashboard/Account.vue";
 import Help from "./Dashboard/Help.vue";
-import sellingStateService from "../services/sellingStateService"
+import sellingStateService from "../services/sellingStateService";
 
 export default {
   name: "Dashboard",
@@ -272,7 +272,7 @@ export default {
         }
         const hnDetails = hostnameDict[des];
         const { domain, counts } = hnDetails;
-        alert(`1 calculatePrivacyExposure domain=${domain}`);
+        // alert(`1 calculatePrivacyExposure domain=${domain}`);
         if (!allDomains.getOwnPropertyDescriptor(domain)) {
           allDomains[domain] = false;
           allDomainCount += 1;

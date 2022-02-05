@@ -1,8 +1,12 @@
 <template>
   <v-app id="app">
     <loading v-if="loading" />
-    <dashboard v-else-if="isLoggedInCorrectly" />
-    <onboarding v-else-if="!isLoggedInCorrectly" />
+    <dashboard v-else-if="dashboardSelected" />
+    <onboarding
+      v-else-if="onboardingSelected"
+      v-on:setVerificationNext="verifying = true"
+      v-on:dismissVerification="verifying = false"
+    />
   </v-app>
 </template>
 
@@ -24,10 +28,20 @@ export default {
   },
   data: () => ({
     loading: true,
+    verifying: false,
   }),
   computed: {
     isLoggedInCorrectly: function () {
       return this.$store.state.authentication.status.loggedIn;
+    },
+    onboardingSelected() {
+      return (
+        !this.isLoggedInCorrectly ||
+        (this.isLoggedInCorrectly && this.verifying)
+      );
+    },
+    dashboardSelected() {
+      return this.isLoggedInCorrectly && !this.verifying;
     },
   },
   async mounted() {
@@ -53,11 +67,11 @@ export default {
 }
 html {
   width: 350px;
-  height: 600px;
+  height: 550px;
 }
 #app {
   position: relative;
   width: 350px;
-  height: 600px;
+  height: 550px;
 }
 </style>

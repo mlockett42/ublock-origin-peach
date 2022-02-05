@@ -35,7 +35,7 @@
       <v-row>
         <v-col cols="12" class="pa-0">
           <v-card-text class="pa-0">
-            <v-container class="mb-3">
+            <v-container>
               <v-row>
                 <v-col class="pa-0">
                   <div
@@ -69,25 +69,26 @@
       </v-row>
       <v-row>
         <v-col cols="12" class="pa-0">
-          <v-card-text class="pa-0">
-            <v-container class="mb-3" v-if="error.length > 0">
-              <v-row>
-                <v-col class="pa-0">
-                  <div
-                    style="
-                      font-family: Glacial Indifference;
-                      font-size: 13px;
-                      color: red;
-                      text-align: center;
-                    "
-                  >
-                    {{ error }}
-                  </div>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <v-card-text class="pa-0">
+          <v-card-actions class="pa-0 mb-6">
+            <v-btn
+              v-on:click="$emit('dismissVerification')"
+              depressed
+              rounded
+              dark
+              block
+              class="px-4 py-5 pr-3 gradient-button"
+            >
+              <span
+                style="
+                  font-family: Glacial Indifference;
+                  text-transform: none;
+                  font-size: 16px;
+                "
+                >Dismiss</span
+              >
+            </v-btn>
+          </v-card-actions>
+          <!-- <v-card-text class="pa-0">
             <div
               style="
                 text-align: center;
@@ -99,7 +100,7 @@
               Didn't receive the email?
               <span style="color: #d98150">Resend</span>
             </div>
-          </v-card-text>
+          </v-card-text> -->
         </v-col>
       </v-row>
     </v-container>
@@ -107,21 +108,10 @@
 </template>
 
 <script>
-// import loginService from "../services/loginService";
-
 export default {
   name: "Register",
-  data() {
-    return {
-      signingUp: false,
-      userName: "",
-      password1: "",
-      password2: "",
-      showPassword1: false,
-      showPassword2: false,
-      error: "",
-      email: "you@example.com",
-    };
+  props: {
+    email: String,
   },
 };
 </script>
