@@ -140,12 +140,12 @@
           </v-container>
           <v-card-actions class="pa-0 mb-6">
             <v-btn
+              v-on:click="createAccount()"
               depressed
               rounded
               dark
               block
               class="px-4 py-5 pr-3 gradient-button"
-              @click="createAccount()"
             >
               <v-progress-circular
                 v-if="signingUp"
@@ -210,32 +210,22 @@ export default {
       this.signingUp = true;
       if (this.password1 !== this.password2) {
         this.error = "The passwords must match.";
-        alert(this.error);
         this.signingUp = false;
         return;
       }
-      await loginService.createUser(this.userName, this.password1);
-      await loginService.login(this.$store, this.userName, this.password1);
-      alert(
-        "User was successfully created. You will receive an email to validate the account."
-      );
-      this.signingUp = false;
+      try {
+        this.$emit("setVerificationNext");
+        await loginService.createUser(this.userName, this.password1);
+        await loginService.login(this.$store, this.userName, this.password1);
+        this.$emit("toVerification", this.userName);
+      } catch (error) {
+        this.error = "An error has occurred.";
+      } finally {
+        this.signingUp = false;
+      }
     },
     toLogin() {
       this.$emit("toLogin");
-    },
-    methods: {
-      async createAccount() {
-        if (this.password1 !== this.password2) {
-          alert("Passwords must match");
-          return;
-        }
-        await loginService.createUser(this.userName, this.password1);
-        await loginService.login(this.$store, this.userName, this.password1);
-        alert(
-          "User was successfully created. You will receive an email to validate the account."
-        );
-      },
     },
   },
 };

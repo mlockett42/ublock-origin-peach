@@ -10,9 +10,18 @@
   >
     <v-row>
       <v-col>
-        <register v-on:toLogin="selectedOption = 0" v-if="registerSelected" />
+        <register
+          v-on:toLogin="selectedOption = 0"
+          v-on:setVerificationNext="$emit('setVerificationNext')"
+          v-on:toVerification="selectVerification"
+          v-if="registerSelected"
+        />
         <login v-on:toRegister="selectedOption = 1" v-else-if="loginSelected" />
-        <verification v-else-if="verificationSelected" />
+        <verification
+          v-else-if="verificationSelected"
+          v-bind:email="email"
+          v-on:dismissVerification="$emit('dismissVerification')"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -34,7 +43,8 @@ export default {
   },
   data() {
     return {
-      selectedOption: 1,
+      selectedOption: 2, //1
+      email: "you@example.com",
     };
   },
   computed: {
@@ -57,6 +67,10 @@ export default {
     },
     createAccount() {
       this.selectedOption = 1;
+    },
+    selectVerification(email) {
+      this.email = email;
+      this.selectedOption = 2;
     },
   },
 };

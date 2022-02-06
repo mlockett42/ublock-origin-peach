@@ -210,15 +210,15 @@ describe("verify_we_can_build_daily_summaries", () => {
 
         expect(µBlock.axios.get).toHaveBeenCalledTimes(3);
         let params = µBlock.axios.get.mock.calls;
-        expect(params[0][0].toString()).toBe('https://server.gopeach.app/api/peachPublicKey');
-        expect(params[1][0].toString()).toBe('https://server.gopeach.app/api/challengecode');
-        expect(params[2][0].toString()).toBe('https://server.gopeach.app/api/challengecode');
+        expect(params[0][0].toString()).toBe('https://accounts.gopeach.app/api/peachPublicKey');
+        expect(params[1][0].toString()).toBe('https://accounts.gopeach.app/api/challengecode');
+        expect(params[2][0].toString()).toBe('https://accounts.gopeach.app/api/challengecode');
         
         expect(µBlock.axios.post).toHaveBeenCalledTimes(2);
         params = µBlock.axios.post.mock.calls;
 
-        expect(params[0][0].toString()).toBe('https://server.gopeach.app/api/fileUpload');
-        expect(params[1][0].toString()).toBe('https://server.gopeach.app/api/fileUpload');
+        expect(params[0][0].toString()).toBe('https://accounts.gopeach.app/api/fileUpload');
+        expect(params[1][0].toString()).toBe('https://accounts.gopeach.app/api/fileUpload');
         let uploaded = params[0][1];
         expect('signature' in uploaded).toBe(true);
         expect('fileUploadCommand' in uploaded).toBe(true);
@@ -303,8 +303,8 @@ describe("verify_we_can_build_daily_summaries", () => {
         
         let params = µBlock.axios.post.mock.calls;
 
-        expect(params[0][0].toString()).toBe('https://server.gopeach.app/api/fileUpload');
-        expect(params[1][0].toString()).toBe('https://server.gopeach.app/api/fileUpload');
+        expect(params[0][0].toString()).toBe('https://accounts.gopeach.app/api/fileUpload');
+        expect(params[1][0].toString()).toBe('https://accounts.gopeach.app/api/fileUpload');
 
         let uploaded = params[0][1];
         expect('signature' in uploaded).toBe(true);

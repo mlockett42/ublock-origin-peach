@@ -234,45 +234,6 @@
                             </v-row>
                           </v-container>
                         </v-card>
-                        <v-divider
-                          style="background-color: rgb(217, 129, 80, 0.3)"
-                        ></v-divider>
-                        <v-card
-                          flat
-                          class="pa-3 py-2 rounded-lg"
-                          href="https://www.instagram.com/gopeach.app/"
-                          target="_blank"
-                        >
-                          <v-container>
-                            <v-row>
-                              <v-col
-                                cols="auto"
-                                class="pa-1"
-                                align-self="center"
-                              >
-                                <div
-                                  style="
-                                    font-family: Glacial Indifference;
-                                    font-size: 16px;
-                                    color: #d98150;
-                                  "
-                                >
-                                  Follow us on instagram
-                                </div>
-                              </v-col>
-                              <v-spacer></v-spacer>
-                              <v-col
-                                cols="auto"
-                                class="pa-0"
-                                align-self="center"
-                              >
-                                <v-icon color="#d98150"
-                                  >mdi-chevron-right</v-icon
-                                >
-                              </v-col>
-                            </v-row>
-                          </v-container>
-                        </v-card>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -285,7 +246,7 @@
                     font-size: 16px;
                   "
                 >
-                  Licence compliance
+                  licence compliance
                 </div>
                 <v-card
                   flat
