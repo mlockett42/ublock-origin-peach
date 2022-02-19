@@ -189,7 +189,8 @@ export default {
     async login() {
       this.loggingIn = true;
       try {
-        await loginService.login(this.$store, this.userName, this.password);
+        let emailAddress = this.userName.toLowerCase();
+        await loginService.login(this.$store, emailAddress, this.password);
       } catch (err) {
         if (err.name === "LoginException") {
           this.error = "Incorrect username or password.";

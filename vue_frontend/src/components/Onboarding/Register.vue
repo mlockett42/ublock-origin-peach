@@ -213,11 +213,22 @@ export default {
         this.signingUp = false;
         return;
       }
+      if (!this.password1 || this.password1 == "") {
+        this.error = "Password must be set";
+        this.signingUp = false;
+        return;
+      }
+      let emailAddress = this.userName.toLowerCase();
+      if (!loginService.emailIsValid(emailAddress)) {
+        this.error = "Invalid email address";
+        this.signingUp = false;
+        return;
+      }
       try {
         this.$emit("setVerificationNext");
-        await loginService.createUser(this.userName, this.password1);
-        await loginService.login(this.$store, this.userName, this.password1);
-        this.$emit("toVerification", this.userName);
+        await loginService.createUser(emailAddress, this.password1);
+        await loginService.login(this.$store, emailAddress, this.password1);
+        this.$emit("toVerification", emailAddress);
       } catch (error) {
         this.error = "An error has occurred.";
       } finally {
